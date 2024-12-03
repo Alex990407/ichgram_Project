@@ -1,0 +1,133 @@
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #f5f5f5;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.logo {
+  max-width: 100%; /* Для адаптивности */
+  width: 200px; /* Увеличенный размер логотипа */
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-family: "Roboto", sans-serif; /* Используем Roboto */
+  font-weight: 600; /* Устанавливаем жирность */
+  font-size: 16px; /* Размер текста */
+  line-height: 20px; /* Межстрочное расстояние */
+  text-align: center; /* Центровка текста */
+  color: #737373; /* Цвет текста */
+  margin-bottom: 20px; /* Отступ снизу */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 400px;
+}
+
+input {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 12px;
+  font-size: 16px;
+  color: white;
+  background-color: #0095f6;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #007bb5;
+}
+
+p {
+  font-size: 12px;
+  color: #777;
+}
+
+a {
+  color: #0095f6;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.login-link {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+/* --- Медиазапросы для адаптивности --- */
+@media (max-width: 768px) {
+  .signup-container {
+    padding: 15px;
+  }
+
+  .logo {
+    width: 180px; /* Уменьшенный размер логотипа */
+  }
+
+  form {
+    gap: 8px;
+    max-width: 100%; /* Убираем фиксированное ограничение */
+  }
+
+  input,
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .login-link {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-container {
+    padding: 10px;
+  }
+
+  .logo {
+    width: 150px; /* Ещё меньше для маленьких экранов */
+  }
+
+  input,
+  button {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  h2 {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .login-link {
+    font-size: 10px;
+  }
+}
