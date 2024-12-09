@@ -1,12 +1,16 @@
 import React from "react";
-import logo from "../assets/ICHGRAM.png"; // Импорт логотипа ICHGRAM
+import { ReactComponent as IchgramIcon } from "../assets/ICHGRAM.svg"; // Импорт SVG как компонент
+// import logo from "../assets/ICHGRAM.png"; // Импорт логотипа ICHGRAM
 import "../styles/Signup.css";
 
 function Signup() {
   return (
     <div className="signup-container">
       {/* ЛОГОТИП ICHGRAM */}
-      <img src={logo} alt="ICHGRAM Logo" className="logo" />
+      {/* <img src={logo} alt="ICHGRAM Logo" className="logo" /> */}
+      <div className="icon-container">
+        <IchgramIcon className="IchgramIcon" />{" "}
+      </div>
       <h2>Sign up to see photos and videos from your friends.</h2>
       <form>
         <input type="email" placeholder="Email" />

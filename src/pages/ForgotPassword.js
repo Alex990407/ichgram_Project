@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/ForgotPassword.css";
+import { ReactComponent as LockIcon } from "../assets/Trouble_logging.svg"; // Импорт SVG как компонент
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -12,11 +13,7 @@ const ForgotPassword = () => {
   return (
     <div className="forgot-password-container">
       <div className="icon-container">
-        <img
-          src="/assets/lock-icon.png"
-          alt="Lock Icon"
-          className="lock-icon"
-        />
+        <LockIcon className="lock-icon" /> {/* Используем SVG как компонент */}
       </div>
       <h2>Trouble logging in?</h2>
       <p>

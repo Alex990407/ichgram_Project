@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/Login.css";
-import logo from "../assets/ICHGRAM.png"; // Импорт логотипа ICHGRAM
+import { ReactComponent as IchgramIcon } from "../assets/ICHGRAM.svg"; // Импорт SVG как компонент
+// import logo from "../assets/ICHGRAM.png"; // Импорт логотипа ICHGRAM
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +16,10 @@ const Login = () => {
   return (
     <div className="login-container">
       {/* ЛОГОТИП ICHGRAM */}
-      <img src={logo} alt="ICHGRAM Logo" className="logo" />
+      {/* <img src={logo} alt="ICHGRAM Logo" className="logo" /> */}
+      <div className="icon-container">
+        <IchgramIcon className="IchgramIcon" />{" "}
+      </div>
       <form onSubmit={handleLogin}>
         <input
           type="email"

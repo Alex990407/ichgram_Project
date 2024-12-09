@@ -15,6 +15,12 @@
   margin-bottom: 20px;
 }
 
+.IchgramIcon {
+  width: 190px; /* Установите ширину */
+  height: auto; /* Высота будет рассчитываться автоматически */
+  margin-bottom: 10px; /* Отступ снизу */
+}
+
 form {
   display: flex;
   flex-direction: column;
