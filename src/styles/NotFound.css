@@ -1,0 +1,106 @@
+.notfound-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+  padding: 20px; /* Добавляем отступы для удобства на маленьких экранах */
+}
+
+.notfound-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+  flex-wrap: wrap; /* Для адаптации на маленьких экранах */
+}
+
+.icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Phone-img {
+  width: 300px; /* Устанавливаем фиксированную ширину для изображения */
+  height: auto;
+}
+
+/* Скрываем изображение на маленьких экранах */
+@media (max-width: 768px) {
+  .Phone-img {
+    display: none;
+  }
+}
+
+.text-container {
+  max-width: 600px;
+  padding: 0 15px; /* Добавляем отступы на маленьких экранах */
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.5;
+  padding: 0 10px; /* Добавляем отступы для мобильных устройств */
+}
+
+/* Дополнительные настройки для маленьких экранов */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 20px; /* Уменьшаем размер заголовка */
+  }
+
+  p {
+    font-size: 14px; /* Уменьшаем размер текста */
+  }
+
+  .notfound-content {
+    flex-direction: column; /* Перестраиваем в колонку для узких экранов */
+  }
+}
+
+/* .notfound-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.notfound-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+}
+
+.text-container {
+  max-width: 600px;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.5;
+} */
