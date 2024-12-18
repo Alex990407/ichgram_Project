@@ -105,10 +105,23 @@ const EditProfile = () => {
             variant="contained"
             component="label"
             sx={{
-              textTransform: "none",
-              fontSize: "14px",
-              padding: "8px 20px",
-              borderRadius: "8px",
+              textTransform: "none", // Отключаем верхний регистр текста
+              fontSize: "14px", // Размер шрифта
+              fontWeight: "500", // Полужирный шрифт
+              width: "115px", // Фиксированная ширина
+              height: "32px", // Фиксированная высота
+              padding: "6px 0", // Вертикальные отступы
+              borderRadius: "8px", // Скругленные углы
+              backgroundColor: "rgba(0, 149, 246, 1)", // Цвет кнопки
+              color: "white", // Цвет текста
+              display: "flex", // Flex для центрирования
+              justifyContent: "center", // Центрируем содержимое по горизонтали
+              alignItems: "center", // Центрируем содержимое по вертикали
+              whiteSpace: "nowrap", // Запрещаем перенос текста
+              overflow: "hidden", // Скрываем выходящие элементы
+              "&:hover": {
+                backgroundColor: "rgba(0, 120, 200, 1)", // Цвет при наведении
+              },
             }}
           >
             New photo
@@ -174,21 +187,24 @@ const EditProfile = () => {
           }}
         />
 
-        {/* Кнопка Save */}
         <Button
           type="submit"
           variant="contained"
           sx={{
-            width: "100%",
+            maxWidth: "268px",
+            height: "32px",
+            borderRadius: "8px",
             backgroundColor: "rgba(0, 149, 246, 1)",
             color: "white",
+            fontSize: "14px",
+            fontWeight: "500",
             textTransform: "none",
-            height: 48,
-            fontSize: "16px",
-            borderRadius: "8px",
+            marginBottom: "16px", // Отступ снизу
+            display: "block",
             "&:hover": {
               backgroundColor: "rgba(0, 120, 200, 1)",
             },
+            width: { xs: "100%", sm: "268px" }, // Адаптивность
           }}
         >
           Save

@@ -15,21 +15,23 @@ const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  //   useEffect(() => {
-  //     const fetchProfile = async () => {
-  //       try {
-  //         const { data } = await axios.get(`/api/profile/${userId}`);
-  //         setProfile(data);
-  //         setLoading(false);
-  //       } catch (error) {
-  //         console.error("Error fetching profile:", error);
-  //         setLoading(false);
-  //       }
-  //     };
-  //     fetchProfile();
-  //   }, [userId]);
+  // Закомментированный код для запроса на сервер
+  // useEffect(() => {
+  //   const fetchProfile = async () => {
+  //     try {
+  //       const { data } = await axios.get(`/api/profile/${userId}`);
+  //       setProfile(data);
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Error fetching profile:", error);
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchProfile();
+  // }, [userId]);
 
   useEffect(() => {
+    // Мок-данные для тестирования
     const mockProfiles = {
       user1: {
         username: "Adolf Hitler",
@@ -74,63 +76,91 @@ const Profile = () => {
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar />
       <Container maxWidth="lg" sx={{ flex: 1, marginTop: 4 }}>
-        <Grid container spacing={3} alignItems="center">
+        <Grid container spacing={4} alignItems="center">
+          {/* Аватар */}
           <Grid item xs={12} sm={3} textAlign="center">
             <Avatar
               src={profile.avatarUrl}
               alt={profile.fullname}
-              sx={{ width: 150, height: 150, margin: "0 auto" }}
+              sx={{
+                width: 150,
+                height: 150,
+                margin: "0 auto",
+              }}
             />
           </Grid>
+          {/* Информация о профиле */}
           <Grid item xs={12} sm={9}>
-            <Typography variant="h4">{profile.username}</Typography>
-            <Typography variant="body1" sx={{ color: "gray" }}>
-              {profile.description}
-            </Typography>
-            <Box display="flex" gap={2} mt={2}>
-              <Typography>
-                <strong>{profile.posts.length}</strong> posts
-              </Typography>
-              <Typography>
-                <strong>{profile.followers}</strong> followers
-              </Typography>
-              <Typography>
-                <strong>{profile.following}</strong> following
-              </Typography>
-            </Box>
-            <Box mt={2} display="flex" gap={2}>
-              <Button
-                variant="contained"
+            {/* Добавлен отступ для текста */}
+            <Box sx={{ marginLeft: { xs: 0, sm: 4 } }}>
+              <Typography
+                variant="h4"
                 sx={{
-                  backgroundColor: "rgba(0, 149, 246, 1)",
-                  color: "rgba(255, 255, 255, 1)", // Белый текст
-                  fontFamily: "Roboto",
-                  "&:hover": {
-                    backgroundColor: "rgba(0, 149, 246, 0.9)", // Легкое затемнение при наведении
-                  },
+                  fontWeight: "bold",
+                  textAlign: { xs: "center", sm: "left" },
                 }}
               >
-                Follow
-              </Button>
-              <Button
-                variant="outlined"
+                {profile.username}
+              </Typography>
+              <Typography
+                variant="body1"
                 sx={{
-                  backgroundColor: "rgba(239, 239, 239, 1)",
-                  color: "rgba(0, 0, 0, 1)", // Черный текст
-                  fontFamily: "Roboto",
-                  borderColor: "rgba(239, 239, 239, 1)", // Без обводки при наведении
-                  "&:hover": {
-                    backgroundColor: "rgba(0, 149, 246, 0.9)",
-                  },
+                  color: "gray",
+                  marginTop: 1,
+                  textAlign: { xs: "center", sm: "left" },
                 }}
               >
-                Message
-              </Button>
+                {profile.description}
+              </Typography>
+              <Box
+                display="flex"
+                gap={2}
+                mt={2}
+                justifyContent={{ xs: "center", sm: "flex-start" }}
+              >
+                <Typography>
+                  <strong>{profile.posts.length}</strong> posts
+                </Typography>
+                <Typography>
+                  <strong>{profile.followers}</strong> followers
+                </Typography>
+                <Typography>
+                  <strong>{profile.following}</strong> following
+                </Typography>
+              </Box>
+              {/* Кнопки Follow и Message */}
+              <Box
+                mt={2}
+                display="flex"
+                gap={2}
+                justifyContent={{ xs: "center", sm: "flex-start" }}
+              >
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "rgba(0, 149, 246, 1)",
+                    color: "white",
+                    "&:hover": { backgroundColor: "rgba(0, 120, 200, 1)" },
+                  }}
+                >
+                  Follow
+                </Button>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    borderColor: "rgba(0, 0, 0, 0.1)",
+                    color: "black",
+                    "&:hover": { borderColor: "rgba(0, 0, 0, 0.3)" },
+                  }}
+                >
+                  Message
+                </Button>
+              </Box>
             </Box>
           </Grid>
         </Grid>
 
-        {/* Posts Section */}
+        {/* Секция постов */}
         <Grid container spacing={2} mt={4}>
           {profile.posts.map((post) => (
             <Grid item xs={12} sm={6} md={4} key={post.id}>

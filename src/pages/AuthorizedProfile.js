@@ -10,26 +10,29 @@ import {
 } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
+import CreatePostModal from "../components/CreatePostModal";
 // import axios from "axios";
 
-const AuthorizedProfile = () => {
+const AuthorizedProfile = ({ onOpenCreatePost }) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     // Закомментированный запрос на сервер
-    // const fetchProfile = async () => {
-    //   try {
-    //     const response = await axios.get("/api/profile"); // Эндпоинт для получения профиля
-    //     setProfile(response.data.profile); // backend возвращает объект profile
-    //     setLoading(false);
-    //   } catch (error) {
-    //     console.error("Error fetching profile:", error);
-    //     setLoading(false);
-    //   }
-    // };
-    // fetchProfile();
+    /*
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get("/api/profile");
+        setProfile(response.data.profile);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+    */
 
     // Используем мок-данные
     const mockProfile = {
@@ -53,6 +56,7 @@ const AuthorizedProfile = () => {
         },
       ],
     };
+
     setProfile(mockProfile);
     setLoading(false);
   }, []);
@@ -60,7 +64,7 @@ const AuthorizedProfile = () => {
   if (loading) {
     return (
       <div style={{ display: "flex", minHeight: "100vh" }}>
-        <Sidebar />
+        <Sidebar onOpenCreatePost={onOpenCreatePost} />
         <Container sx={{ flex: 1, marginTop: 4 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={3}>
@@ -99,7 +103,8 @@ const AuthorizedProfile = () => {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
-      <Sidebar />
+      {/* Передаём функцию открытия модалки */}
+      <Sidebar onOpenCreatePost={onOpenCreatePost} />
       <Container sx={{ flex: 1, marginTop: 4 }}>
         {/* User Profile Section */}
         <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>
@@ -154,25 +159,9 @@ const AuthorizedProfile = () => {
         </Grid>
 
         {/* Posts Section */}
-        <Grid
-          container
-          spacing={2}
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-          }}
-        >
+        <Grid container spacing={2} sx={{ display: "flex", flexWrap: "wrap" }}>
           {profile.posts?.map((post) => (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              key={post.id}
-              sx={{
-                flexGrow: 1,
-              }}
-            >
+            <Grid item xs={12} sm={6} md={4} key={post.id} sx={{ flexGrow: 1 }}>
               <Box
                 component="img"
                 src={post.imageUrl}
