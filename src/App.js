@@ -11,6 +11,7 @@ import AuthorizedProfile from "./pages/AuthorizedProfile";
 import EditProfile from "./pages/EditProfile";
 import CreatePostModal from "./components/CreatePostModal";
 import Home from "./pages/Home";
+import Messages from "./pages/Messages";
 
 const App = () => {
   // Поднятое состояние для модального окна
@@ -27,13 +28,18 @@ const App = () => {
       >
         <div style={{ flex: 1, display: "flex" }}>
           <Routes>
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
               path="/"
               element={<Home onOpenCreatePost={onOpenCreatePost} />} // Главная страница
             />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route
+              path="/messages"
+              element={<Messages onOpenCreatePost={onOpenCreatePost} />}
+            />
+
             <Route
               path="/explore"
               element={<Explore onOpenCreatePost={onOpenCreatePost} />}

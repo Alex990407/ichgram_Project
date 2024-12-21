@@ -17,10 +17,8 @@ const Footer = () => {
       sx={{
         backgroundColor: "#f8f9fa",
         padding: "20px 0",
-        borderTop: "1px solid #e0e0e0",
+
         textAlign: "center",
-        position: "relative",
-        bottom: 0,
         width: "100%",
       }}
     >
@@ -33,9 +31,7 @@ const Footer = () => {
                 color: "#6c757d",
                 textDecoration: "none",
                 fontSize: "16px",
-                "&:hover": {
-                  textDecoration: "underline",
-                },
+                "&:hover": { textDecoration: "underline" },
               }}
             >
               {item.text}
