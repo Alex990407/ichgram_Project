@@ -12,14 +12,23 @@ import EditProfile from "./pages/EditProfile";
 import CreatePostModal from "./components/CreatePostModal";
 import Home from "./pages/Home";
 import Messages from "./pages/Messages";
+import NotificationsPanel from "./components/NotificationsPanel";
+import { Backdrop } from "@mui/material";
 
 const App = () => {
   // Поднятое состояние для модального окна
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+
+  // Ширина Sidebar
+  const sidebarWidth = { xs: 60, sm: 80, md: 200, lg: 245 };
 
   // Функции для управления модалкой
   const onOpenCreatePost = () => setIsCreatePostOpen(true);
   const onCloseCreatePost = () => setIsCreatePostOpen(false);
+
+  const onOpenNotifications = () => setIsNotificationsOpen(true);
+  const onCloseNotifications = () => setIsNotificationsOpen(false);
 
   return (
     <Router>
@@ -33,22 +42,48 @@ const App = () => {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
               path="/"
-              element={<Home onOpenCreatePost={onOpenCreatePost} />} // Главная страница
+              element={
+                <Home
+                  onOpenCreatePost={onOpenCreatePost}
+                  onOpenNotifications={onOpenNotifications}
+                />
+              } // Главная страница
             />
             <Route
               path="/messages"
-              element={<Messages onOpenCreatePost={onOpenCreatePost} />}
+              element={
+                <Messages
+                  onOpenCreatePost={onOpenCreatePost}
+                  onOpenNotifications={onOpenNotifications}
+                />
+              }
             />
 
             <Route
               path="/explore"
-              element={<Explore onOpenCreatePost={onOpenCreatePost} />}
+              element={
+                <Explore
+                  onOpenCreatePost={onOpenCreatePost}
+                  onOpenNotifications={onOpenNotifications}
+                />
+              }
             />
-            <Route path="/profile/:userId" element={<Profile />} />
+            <Route
+              path="/profile/:userId"
+              element={
+                <Profile
+                  onOpenCreatePost={onOpenCreatePost}
+                  onOpenNotifications={onOpenNotifications}
+                />
+              }
+            />
             <Route
               path="/myProfile"
               element={
-                <AuthorizedProfile onOpenCreatePost={onOpenCreatePost} />
+                <AuthorizedProfile
+                  onOpenCreatePost={onOpenCreatePost}
+                  onOpenNotifications={onOpenNotifications}
+                />
               }
             />
             <Route path="/edit-profile" element={<EditProfile />} />
@@ -56,7 +91,22 @@ const App = () => {
           </Routes>
         </div>
 
-        {/* Глобальное модальное окно для создания поста */}
+        <Backdrop
+          open={isNotificationsOpen}
+          sx={{
+            zIndex: (theme) => theme.zIndex.drawer - 1,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
+        />
+
+        {/* Панель уведомлений */}
+        <NotificationsPanel
+          open={isNotificationsOpen}
+          onClose={onCloseNotifications}
+          sidebarWidth={sidebarWidth.lg} // Передаём ширину Sidebar
+        />
+
+        {/*  модальное окно для создания поста */}
         <CreatePostModal open={isCreatePostOpen} onClose={onCloseCreatePost} />
 
         {/* Footer */}

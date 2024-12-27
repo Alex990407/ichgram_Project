@@ -10,7 +10,7 @@ import {
   Box,
 } from "@mui/material";
 
-const Profile = () => {
+const Profile = ({ onOpenCreatePost, onOpenNotifications }) => {
   const { userId } = useParams();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -74,7 +74,10 @@ const Profile = () => {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
-      <Sidebar />
+      <Sidebar
+        onOpenCreatePost={onOpenCreatePost}
+        onOpenNotifications={onOpenNotifications}
+      />
       <Container maxWidth="lg" sx={{ flex: 1, marginTop: 4 }}>
         <Grid container spacing={4} alignItems="center">
           {/* Аватар */}

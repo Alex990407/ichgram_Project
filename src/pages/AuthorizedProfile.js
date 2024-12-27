@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import CreatePostModal from "../components/CreatePostModal";
 // import axios from "axios";
 
-const AuthorizedProfile = ({ onOpenCreatePost }) => {
+const AuthorizedProfile = ({ onOpenCreatePost, onOpenNotifications }) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -64,7 +64,6 @@ const AuthorizedProfile = ({ onOpenCreatePost }) => {
   if (loading) {
     return (
       <div style={{ display: "flex", minHeight: "100vh" }}>
-        <Sidebar onOpenCreatePost={onOpenCreatePost} />
         <Container sx={{ flex: 1, marginTop: 4 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={3}>
@@ -104,7 +103,10 @@ const AuthorizedProfile = ({ onOpenCreatePost }) => {
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       {/* Передаём функцию открытия модалки */}
-      <Sidebar onOpenCreatePost={onOpenCreatePost} />
+      <Sidebar
+        onOpenCreatePost={onOpenCreatePost}
+        onOpenNotifications={onOpenNotifications}
+      />
       <Container sx={{ flex: 1, marginTop: 4 }}>
         {/* User Profile Section */}
         <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>

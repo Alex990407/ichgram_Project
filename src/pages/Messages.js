@@ -16,7 +16,11 @@ import {
 
 import Sidebar from "../components/Sidebar";
 
-const Messages = ({ onOpenCreatePost, onOpenSearchModal }) => {
+const Messages = ({
+  onOpenCreatePost,
+  onOpenSearchModal,
+  onOpenNotifications,
+}) => {
   const users = [
     {
       id: 1,
@@ -103,6 +107,7 @@ const Messages = ({ onOpenCreatePost, onOpenSearchModal }) => {
       <Sidebar
         onOpenCreatePost={onOpenCreatePost}
         onOpenSearchModal={onOpenSearchModal}
+        onOpenNotifications={onOpenNotifications}
       />
       <Paper elevation={1} sx={{ width: "25%", borderRight: "1px solid #ddd" }}>
         <Typography variant="h6" sx={{ p: 2, fontWeight: "bold" }}>
