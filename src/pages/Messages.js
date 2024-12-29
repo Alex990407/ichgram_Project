@@ -181,6 +181,7 @@ const Messages = ({
                   sx={{
                     color:
                       msg.type === "sent" ? "rgba(255, 255, 255, 1)" : "#000",
+                    whiteSpace: "pre-wrap",
                   }}
                 >
                   {msg.text}
@@ -196,43 +197,58 @@ const Messages = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            width: "100%",
+            boxSizing: "border-box",
           }}
         >
           <TextField
-            multiline // Позволяет тексту переноситься на новую строку
-            rows={2} // Указывает минимальную высоту - 1 строка
-            maxRows={2} // Устанавливает максимальную высоту - 1 строка
+            multiline
+            rows={2}
+            maxRows={2}
             placeholder="Write message"
             variant="outlined"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={handleKeyDown} // Вызов при зажатии клавиши
-            onKeyUp={handleKeyUp} // Вызов при отпускании клавиши
+            onKeyDown={handleKeyDown}
+            onKeyUp={handleKeyUp}
             sx={{
-              width: "80%",
-              height: "44px",
-              borderRadius: "8px",
+              flexGrow: 1,
               "& .MuiOutlinedInput-root": {
                 borderRadius: "8px",
-                paddingRight: "0px",
+                display: "flex",
+                alignItems: "stretch", // Выровнять содержимое по высоте
+                padding: 0,
+              },
+              "& .MuiOutlinedInput-input": {
+                padding: "12px", // Отступы текста внутри поля
               },
             }}
             InputProps={{
               endAdornment: (
-                <Button
-                  variant="contained"
-                  onClick={handleSendMessage}
+                <Box
                   sx={{
-                    width: "15%",
-                    height: "100%",
-                    borderTopRightRadius: "8px",
-                    borderBottomRightRadius: "8px",
-                    bgcolor: "#4f46e5",
-                    color: "#fff",
+                    display: "flex",
+                    alignItems: "stretch",
                   }}
                 >
-                  Send
-                </Button>
+                  <Button
+                    variant="contained"
+                    onClick={handleSendMessage}
+                    sx={{
+                      height: "100%", // Занимает всю высоту TextField
+                      borderTopRightRadius: "8px",
+                      borderBottomRightRadius: "8px",
+                      bgcolor: "#4f46e5",
+                      color: "#fff",
+                      padding: "0 16px",
+                      minWidth: "64px",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    Send
+                  </Button>
+                </Box>
               ),
             }}
           />
