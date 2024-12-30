@@ -19,7 +19,7 @@ import { ReactComponent as CreateIcon } from "../assets/sidebarIcons/Create.svg"
 import { ReactComponent as IchgramIcon } from "../assets/ICHGRAM.svg";
 import PersonIcon from "@mui/icons-material/Person";
 
-const Sidebar = ({ onOpenCreatePost, onOpenNotifications }) => {
+const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // Адаптивность для маленьких экранов
   const sidebarWidth = isSmallScreen ? 60 : 245;
@@ -29,7 +29,9 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications }) => {
     {
       text: "Search",
       icon: <SearchIcon width="24px" height="24px" />,
-      path: "/search",
+      action: () => {
+        onOpenSearch();
+      },
     },
     {
       text: "Explore",

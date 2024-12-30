@@ -6,7 +6,7 @@ import { ReactComponent as Post2 } from "../assets/Post2.svg";
 import { ReactComponent as Post3 } from "../assets/Post3.svg";
 import Sidebar from "../components/Sidebar";
 
-const Explore = ({ onOpenCreatePost, onOpenNotifications }) => {
+const Explore = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -47,6 +47,7 @@ const Explore = ({ onOpenCreatePost, onOpenNotifications }) => {
       <Sidebar
         onOpenCreatePost={onOpenCreatePost}
         onOpenNotifications={onOpenNotifications}
+        onOpenSearch={onOpenSearch}
       />
       <Container maxWidth="lg" sx={{ flex: 1, mt: 4 }}>
         <Typography variant="h4" sx={{ mb: 3 }}>

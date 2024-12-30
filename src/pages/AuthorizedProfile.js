@@ -13,7 +13,11 @@ import { useNavigate } from "react-router-dom";
 import CreatePostModal from "../components/CreatePostModal";
 // import axios from "axios";
 
-const AuthorizedProfile = ({ onOpenCreatePost, onOpenNotifications }) => {
+const AuthorizedProfile = ({
+  onOpenCreatePost,
+  onOpenNotifications,
+  onOpenSearch,
+}) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -106,6 +110,7 @@ const AuthorizedProfile = ({ onOpenCreatePost, onOpenNotifications }) => {
       <Sidebar
         onOpenCreatePost={onOpenCreatePost}
         onOpenNotifications={onOpenNotifications}
+        onOpenSearch={onOpenSearch}
       />
       <Container sx={{ flex: 1, marginTop: 4 }}>
         {/* User Profile Section */}

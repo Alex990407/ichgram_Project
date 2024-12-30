@@ -13,12 +13,14 @@ import CreatePostModal from "./components/CreatePostModal";
 import Home from "./pages/Home";
 import Messages from "./pages/Messages";
 import NotificationsPanel from "./components/NotificationsPanel";
+import SearchPanel from "./components/SearchPanel";
 import { Backdrop } from "@mui/material";
 
 const App = () => {
   // Поднятое состояние для модального окна
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Ширина Sidebar
   const sidebarWidth = { xs: 60, sm: 80, md: 200, lg: 245 };
@@ -29,6 +31,9 @@ const App = () => {
 
   const onOpenNotifications = () => setIsNotificationsOpen(true);
   const onCloseNotifications = () => setIsNotificationsOpen(false);
+
+  const onOpenSearch = () => setIsSearchOpen(true);
+  const onCloseSearch = () => setIsSearchOpen(false);
 
   return (
     <Router>
@@ -46,6 +51,7 @@ const App = () => {
                 <Home
                   onOpenCreatePost={onOpenCreatePost}
                   onOpenNotifications={onOpenNotifications}
+                  onOpenSearch={onOpenSearch}
                 />
               } // Главная страница
             />
@@ -55,6 +61,7 @@ const App = () => {
                 <Messages
                   onOpenCreatePost={onOpenCreatePost}
                   onOpenNotifications={onOpenNotifications}
+                  onOpenSearch={onOpenSearch}
                 />
               }
             />
@@ -65,6 +72,7 @@ const App = () => {
                 <Explore
                   onOpenCreatePost={onOpenCreatePost}
                   onOpenNotifications={onOpenNotifications}
+                  onOpenSearch={onOpenSearch}
                 />
               }
             />
@@ -74,6 +82,7 @@ const App = () => {
                 <Profile
                   onOpenCreatePost={onOpenCreatePost}
                   onOpenNotifications={onOpenNotifications}
+                  onOpenSearch={onOpenSearch}
                 />
               }
             />
@@ -83,6 +92,7 @@ const App = () => {
                 <AuthorizedProfile
                   onOpenCreatePost={onOpenCreatePost}
                   onOpenNotifications={onOpenNotifications}
+                  onOpenSearch={onOpenSearch}
                 />
               }
             />
@@ -104,6 +114,12 @@ const App = () => {
           open={isNotificationsOpen}
           onClose={onCloseNotifications}
           sidebarWidth={sidebarWidth.lg} // Передаём ширину Sidebar
+        />
+
+        <SearchPanel
+          open={isSearchOpen}
+          onClose={onCloseSearch}
+          sidebarWidth={sidebarWidth.lg}
         />
 
         {/*  модальное окно для создания поста */}

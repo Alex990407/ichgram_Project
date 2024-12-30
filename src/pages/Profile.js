@@ -10,7 +10,7 @@ import {
   Box,
 } from "@mui/material";
 
-const Profile = ({ onOpenCreatePost, onOpenNotifications }) => {
+const Profile = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   const { userId } = useParams();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -77,6 +77,7 @@ const Profile = ({ onOpenCreatePost, onOpenNotifications }) => {
       <Sidebar
         onOpenCreatePost={onOpenCreatePost}
         onOpenNotifications={onOpenNotifications}
+        onOpenSearch={onOpenSearch}
       />
       <Container maxWidth="lg" sx={{ flex: 1, marginTop: 4 }}>
         <Grid container spacing={4} alignItems="center">

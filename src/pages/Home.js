@@ -19,7 +19,7 @@ import { ReactComponent as Post1 } from "../assets/Post1.svg";
 import { ReactComponent as Post2 } from "../assets/Post2.svg";
 import { ReactComponent as Post3 } from "../assets/Post3.svg";
 
-const Home = ({ onOpenCreatePost, onOpenNotifications }) => {
+const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -74,6 +74,7 @@ const Home = ({ onOpenCreatePost, onOpenNotifications }) => {
       <Sidebar
         onOpenCreatePost={onOpenCreatePost}
         onOpenNotifications={onOpenNotifications}
+        onOpenSearch={onOpenSearch}
       />
       <Container maxWidth="lg" sx={{ flex: 1, mt: 4 }}>
         <Grid container spacing={2}>

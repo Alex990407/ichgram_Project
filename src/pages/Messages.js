@@ -16,11 +16,7 @@ import {
 
 import Sidebar from "../components/Sidebar";
 
-const Messages = ({
-  onOpenCreatePost,
-  onOpenSearchModal,
-  onOpenNotifications,
-}) => {
+const Messages = ({ onOpenCreatePost, onOpenSearch, onOpenNotifications }) => {
   const users = [
     {
       id: 1,
@@ -106,7 +102,7 @@ const Messages = ({
     <Container maxWidth="lg" sx={{ display: "flex", height: "100vh", mt: 2 }}>
       <Sidebar
         onOpenCreatePost={onOpenCreatePost}
-        onOpenSearchModal={onOpenSearchModal}
+        onOpenSearch={onOpenSearch}
         onOpenNotifications={onOpenNotifications}
       />
       <Paper elevation={1} sx={{ width: "25%", borderRight: "1px solid #ddd" }}>
