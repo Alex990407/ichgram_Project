@@ -1,13 +1,19 @@
 import React, { useState } from "react";
-import { ReactComponent as IchgramIcon } from "../assets/ICHGRAM.svg"; // Импорт SVG как компонент
-import { validateEmail, validatePassword } from "../utils/validation"; // Импорт функций валидации
+import { useNavigate } from "react-router-dom"; // Импорт useNavigate
+import { ReactComponent as IchgramIcon } from "../assets/ICHGRAM.svg";
+import { validateEmail, validatePassword } from "../utils/validation";
+import styles from "../styles/Login.module.css";
+import useLogin from "../hooks/useLogin";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
 
-  const handleLogin = (e) => {
+  const { login, loading, error } = useLogin();
+  const navigate = useNavigate(); // Хук для навигации
+
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     // Валидация полей
@@ -19,155 +25,62 @@ const Login = () => {
       return;
     }
 
-    console.log("Logging in with:", { email, password });
-    // TODO: Добавить запрос к API для логина
-  };
+    const response = await login(email, password);
 
-  const styles = {
-    pageContainer: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      minHeight: "100vh",
-      backgroundColor: "#f8f9fa",
-      width: "100%",
-      textAlign: "center",
-    },
-    loginContainer: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "20px",
-      backgroundColor: "#fff",
-      borderRadius: "8px",
-      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      width: "100%",
-      maxWidth: "400px",
-    },
-    iconContainer: {
-      marginBottom: "20px",
-    },
-    inputContainer: {
-      marginBottom: "10px",
-      width: "100%",
-    },
-    input: {
-      width: "100%",
-      padding: "10px",
-      fontSize: "16px",
-      border: "1px solid #ccc",
-      borderRadius: "4px",
-      outline: "none",
-      boxSizing: "border-box",
-    },
-    inputFocus: {
-      borderColor: "#007bff",
-      boxShadow: "0 0 5px rgba(0, 123, 255, 0.5)",
-    },
-    errorMessage: {
-      color: "red",
-      fontSize: "14px",
-      marginTop: "5px",
-    },
-    button: {
-      width: "100%",
-      padding: "10px",
-      backgroundColor: "#007bff",
-      color: "white",
-      fontSize: "16px",
-      border: "none",
-      borderRadius: "4px",
-      cursor: "pointer",
-      marginTop: "10px",
-    },
-    buttonHover: {
-      backgroundColor: "#0056b3",
-    },
-    orDivider: {
-      margin: "20px 0",
-      textAlign: "center",
-      color: "#666",
-      fontSize: "14px",
-    },
-    signup: {
-      textAlign: "center",
-      marginTop: "10px",
-    },
-    signupLink: {
-      color: "#007bff",
-      textDecoration: "none",
-    },
-    signupLinkHover: {
-      textDecoration: "underline",
-    },
+    if (response) {
+      console.log("Successfully logged in:", response);
+      navigate("/"); // Перенаправление на домашнюю страницу
+    }
   };
 
   return (
-    <div style={styles.pageContainer}>
-      <div style={styles.loginContainer}>
-        <div style={styles.iconContainer}>
+    <div className={styles.pageContainer}>
+      <div className={styles.loginContainer}>
+        <div className={styles.iconContainer}>
           <IchgramIcon />
         </div>
         <form onSubmit={handleLogin}>
-          <div style={styles.inputContainer}>
+          <div className={styles.inputContainer}>
             <input
               type="email"
               placeholder="Username, or email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              style={styles.input}
+              className={styles.input}
             />
             {errors.email && (
-              <span style={styles.errorMessage}>{errors.email}</span>
+              <span className={styles.errorMessage}>{errors.email}</span>
             )}
           </div>
-          <div style={styles.inputContainer}>
+          <div className={styles.inputContainer}>
             <input
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              style={styles.input}
+              className={styles.input}
             />
             {errors.password && (
-              <span style={styles.errorMessage}>{errors.password}</span>
+              <span className={styles.errorMessage}>{errors.password}</span>
             )}
           </div>
-          <button
-            type="submit"
-            style={styles.button}
-            onMouseOver={(e) =>
-              (e.target.style.backgroundColor =
-                styles.buttonHover.backgroundColor)
-            }
-            onMouseOut={(e) =>
-              (e.target.style.backgroundColor = styles.button.backgroundColor)
-            }
-          >
-            Log in
+          <button type="submit" className={styles.button} disabled={loading}>
+            {loading ? "Loading..." : "Log in"}
           </button>
+          {error && <p className={styles.errorMessage}>{error}</p>}
         </form>
-        <div style={styles.orDivider}>
+        <div className={styles.orDivider}>
           <span>OR</span>
         </div>
-        <a href="/forgot-password" style={styles.signupLink}>
+        <a href="/forgot-password" className={styles.signupLink}>
           Forgot password?
         </a>
-        <div style={styles.signup}>
+        <div className={styles.signup}>
           <p>
             Don't have an account?{" "}
-            <a
-              href="/signup"
-              style={styles.signupLink}
-              onMouseOver={(e) =>
-                (e.target.style.textDecoration =
-                  styles.signupLinkHover.textDecoration)
-              }
-              onMouseOut={(e) => (e.target.style.textDecoration = "none")}
-            >
+            <a href="/signup" className={styles.signupLink}>
               Sign up
             </a>
           </p>

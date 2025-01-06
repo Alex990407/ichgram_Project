@@ -9,7 +9,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { ReactComponent as HomeIcon } from "../assets/sidebarIcons/home.svg";
 import { ReactComponent as SearchIcon } from "../assets/sidebarIcons/Search.svg";
 import { ReactComponent as ExploreIcon } from "../assets/sidebarIcons/explore.svg";
@@ -18,11 +18,19 @@ import { ReactComponent as NotificationsIcon } from "../assets/sidebarIcons/Noti
 import { ReactComponent as CreateIcon } from "../assets/sidebarIcons/Create.svg";
 import { ReactComponent as IchgramIcon } from "../assets/ICHGRAM.svg";
 import PersonIcon from "@mui/icons-material/Person";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // Адаптивность для маленьких экранов
   const sidebarWidth = isSmallScreen ? 60 : 245;
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Удаляем токен из localStorage
+    navigate("/login"); // Перенаправляем пользователя на страницу логина
+  };
 
   const menuItems = [
     { text: "Home", icon: <HomeIcon width="24px" height="24px" />, path: "/" },
@@ -60,6 +68,11 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
       text: "Profile",
       icon: <PersonIcon />, // Material-UI иконка
       path: "/myProfile",
+    },
+    {
+      text: "Logout",
+      icon: <LogoutIcon />, // Material-UI иконка для Logout
+      action: handleLogout, // Выход из системы
     },
   ];
 
@@ -100,6 +113,10 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
                   justifyContent: { xs: "center", sm: "flex-start" },
                   px: { xs: 1, sm: 2 },
                   gap: { lg: 2, md: 1 },
+                  "&:hover": {
+                    backgroundColor: "rgba(0, 0, 0, 0.1)", // Цвет при наведении
+                    cursor: "pointer", // Изменение курсора
+                  },
                 }}
               >
                 <ListItemIcon

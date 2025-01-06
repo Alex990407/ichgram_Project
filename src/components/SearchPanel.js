@@ -16,7 +16,6 @@ import {
 } from "@mui/material";
 import { ReactComponent as ClosePageIcon } from "../assets/Close-page.svg";
 
-// Пример данных пользователей
 const users = [
   {
     id: 1,

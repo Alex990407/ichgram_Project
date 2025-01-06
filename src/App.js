@@ -15,6 +15,8 @@ import Messages from "./pages/Messages";
 import NotificationsPanel from "./components/NotificationsPanel";
 import SearchPanel from "./components/SearchPanel";
 import { Backdrop } from "@mui/material";
+import ProtectedRoute from "./utils/ProtectedRoute"; // Импортируем ProtectedRoute
+import PublicRoute from "./utils/PublicRoute"; // Импортируем PublicRoute
 
 const App = () => {
   // Поднятое состояние для модального окна
@@ -42,48 +44,70 @@ const App = () => {
       >
         <div style={{ flex: 1, display: "flex" }}>
           <Routes>
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/signup"
+              element={
+                <PublicRoute>
+                  <Signup />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              }
+            />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
               path="/"
               element={
-                <Home
-                  onOpenCreatePost={onOpenCreatePost}
-                  onOpenNotifications={onOpenNotifications}
-                  onOpenSearch={onOpenSearch}
-                />
+                <ProtectedRoute>
+                  <Home
+                    onOpenCreatePost={onOpenCreatePost}
+                    onOpenNotifications={onOpenNotifications}
+                    onOpenSearch={onOpenSearch}
+                  />
+                </ProtectedRoute>
               } // Главная страница
             />
             <Route
               path="/messages"
               element={
-                <Messages
-                  onOpenCreatePost={onOpenCreatePost}
-                  onOpenNotifications={onOpenNotifications}
-                  onOpenSearch={onOpenSearch}
-                />
+                <ProtectedRoute>
+                  <Messages
+                    onOpenCreatePost={onOpenCreatePost}
+                    onOpenNotifications={onOpenNotifications}
+                    onOpenSearch={onOpenSearch}
+                  />
+                </ProtectedRoute>
               }
             />
 
             <Route
               path="/explore"
               element={
-                <Explore
-                  onOpenCreatePost={onOpenCreatePost}
-                  onOpenNotifications={onOpenNotifications}
-                  onOpenSearch={onOpenSearch}
-                />
+                <ProtectedRoute>
+                  <Explore
+                    onOpenCreatePost={onOpenCreatePost}
+                    onOpenNotifications={onOpenNotifications}
+                    onOpenSearch={onOpenSearch}
+                  />
+                </ProtectedRoute>
               }
             />
             <Route
               path="/profile/:userId"
               element={
-                <Profile
-                  onOpenCreatePost={onOpenCreatePost}
-                  onOpenNotifications={onOpenNotifications}
-                  onOpenSearch={onOpenSearch}
-                />
+                <ProtectedRoute>
+                  <Profile
+                    onOpenCreatePost={onOpenCreatePost}
+                    onOpenNotifications={onOpenNotifications}
+                    onOpenSearch={onOpenSearch}
+                  />
+                </ProtectedRoute>
               }
             />
             <Route
@@ -96,7 +120,14 @@ const App = () => {
                 />
               }
             />
-            <Route path="/edit-profile" element={<EditProfile />} />
+            <Route
+              path="/edit-profile"
+              element={
+                <ProtectedRoute>
+                  <EditProfile />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
