@@ -1,13 +1,16 @@
+/* --- Основные стили --- */
 .signup-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column; /* Форма и футер расположены по вертикали */
+  justify-content: flex-start;
   align-items: center;
-  /* min-height: 100vh; */
-  height: 100vh; /* 100% высоты окна браузера */
+  min-height: 100vh; /* Минимальная высота равна высоте окна браузера */
   width: 100%;
   background-color: #f5f5f5;
   font-family: Arial, sans-serif;
   padding: 20px;
+  box-sizing: border-box; /* Учитываем отступы */
+  overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку */
 }
 
 .phone-img-container {
@@ -19,18 +22,20 @@
 
 .phone-img {
   max-width: 100%;
-  width: 400px;
+  width: 400px; /* Фиксированная ширина изображения */
   height: auto;
 }
 
 .signup-form-container {
   display: flex;
   flex-direction: column;
-  flex: 1;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Начинаем содержимое сверху */
   max-width: 400px;
-  margin: 0 50px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .icon-container {
@@ -59,12 +64,14 @@ h2 {
 
 button {
   width: 100%;
-  padding: 10px;
+  max-width: 300px;
+  padding: 12px;
   background-color: #0095f6;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
 }
 
 button:hover {
@@ -72,8 +79,10 @@ button:hover {
 }
 
 .login-link {
-  margin-top: 20px;
+  margin-top: 20px; /* Отступ сверху */
+  margin-bottom: 40px; /* Увеличенный отступ снизу */
   font-size: 14px;
+  text-align: center;
 }
 
 a {
@@ -85,6 +94,18 @@ a:hover {
   text-decoration: underline;
 }
 
+/* --- Футер --- */
+footer {
+  text-align: center;
+  padding: 10px;
+  background-color: #f7f7f7;
+  font-size: 14px;
+  color: #333;
+  position: relative; /* Убираем фиксированное положение */
+  bottom: 0;
+  width: 100%;
+}
+
 /* --- Адаптивность --- */
 @media (max-width: 768px) {
   .signup-container {
@@ -92,11 +113,52 @@ a:hover {
   }
 
   .phone-img-container {
-    display: none;
+    display: none; /* Скрываем изображение телефона */
   }
 
   .signup-form-container {
     max-width: 100%;
     padding: 20px;
   }
+
+  button {
+    max-width: 100%;
+  }
+
+  footer {
+    font-size: 12px;
+    padding: 10px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .signup-container {
+    flex-direction: row; /* Оставляем горизонтальную структуру */
+    align-items: flex-start;
+  }
+
+  .phone-img-container {
+    flex: 1;
+  }
+
+  .signup-form-container {
+    flex: 1;
+    max-width: 400px;
+  }
+}
+
+/* --- Прокрутка страницы для футера --- */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Убедимся, что тело страницы занимает всю высоту */
+  margin: 0;
+}
+
+.signup-container {
+  flex: 1; /* Форма занимает все доступное пространство */
+}
+
+footer {
+  flex-shrink: 0; /* Футер всегда располагается внизу */
 }

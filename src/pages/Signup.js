@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ReactComponent as IchgramIcon } from "../assets/ICHGRAM.svg";
-import { ReactComponent as PhoneImg } from "../assets/PhoneImg.svg"; // Импорт SVG телефона
+import { ReactComponent as PhoneImg } from "../assets/PhoneImg.svg";
 import "../styles/Signup.css";
 import { validateEmail, validatePassword } from "../utils/validation";
 import useRegister from "../hooks/useRegister";
@@ -20,17 +20,31 @@ function Signup() {
     username: "",
   });
 
-  const { register, loading, error, success } = useRegister();
+  const { register, loading, error, success, clearError } = useRegister();
 
+  console.log("Error from useRegister:", error); // Лог для отладки
+
+  // Обработчик изменения данных в форме
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Обновляем данные формы
     setFormData({ ...formData, [name]: value });
+
+    // Очищаем ошибку для текущего поля
     setErrors({ ...errors, [name]: "" });
+
+    // Если есть глобальная ошибка (например, предупреждение о регистрации), очищаем её
+    if (error) {
+      clearError();
+    }
   };
 
+  // Обработчик отправки формы
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Валидация полей формы
     const emailError = validateEmail(formData.email);
     const passwordError = validatePassword(formData.password);
     const fullNameError = formData.fullName ? null : "Full Name is required.";
@@ -46,7 +60,18 @@ function Signup() {
       return;
     }
 
+    // Попытка регистрации
     await register(formData);
+
+    // Если ошибка, очищаем форму
+    if (error) {
+      setFormData({
+        email: "",
+        fullName: "",
+        username: "",
+        password: "",
+      });
+    }
   };
 
   return (
@@ -58,6 +83,28 @@ function Signup() {
         <div className="icon-container">
           <IchgramIcon className="IchgramIcon" />
         </div>
+        {error && (
+          <div
+            className="server-error"
+            style={{
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              backgroundColor: "black", // Черный фон
+              color: "red", // Красный цвет текста
+              padding: "20px",
+              borderRadius: "8px",
+              fontSize: "18px",
+              fontWeight: "bold",
+              textAlign: "center",
+              zIndex: 1000, // Поверх всех элементов
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Легкая тень для выделения
+            }}
+          >
+            {error}
+          </div>
+        )}
         <h2>Sign up to see photos and videos from your friends.</h2>
         <form onSubmit={handleSubmit}>
           <div className="input-container">
@@ -120,8 +167,15 @@ function Signup() {
             By signing up, you agree to our <a href="/">Terms</a>,{" "}
             <a href="/">Privacy Policy</a>, and <a href="/">Cookies Policy</a>.
           </p>
-          <button type="submit">Sign up</button>
+          <button type="submit" disabled={loading}>
+            {loading ? "Registering..." : "Sign up"}
+          </button>
         </form>
+        {success && (
+          <div className="success-message">
+            <span>Registration successful! You can now log in.</span>
+          </div>
+        )}
         <div className="login-link">
           Have an account? <a href="/login">Log in</a>
         </div>

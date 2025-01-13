@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 
 const PublicRoute = ({ children }) => {
   // Проверяем, есть ли токен в localStorage
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("authToken");
 
   if (token) {
     // Если токен есть, перенаправляем на главную страницу

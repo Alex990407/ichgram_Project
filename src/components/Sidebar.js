@@ -28,8 +28,10 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Удаляем токен из localStorage
-    navigate("/login"); // Перенаправляем пользователя на страницу логина
+    // Удаляем токен из localStorage
+    localStorage.removeItem("authToken");
+    // Перенаправляем пользователя на страницу логина
+    navigate("/login");
   };
 
   const menuItems = [
@@ -37,9 +39,7 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
     {
       text: "Search",
       icon: <SearchIcon width="24px" height="24px" />,
-      action: () => {
-        onOpenSearch();
-      },
+      action: onOpenSearch,
     },
     {
       text: "Explore",
@@ -54,10 +54,7 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
     {
       text: "Notifications",
       icon: <NotificationsIcon width="24px" height="24px" />,
-      action: () => {
-        console.log("Notifications clicked");
-        onOpenNotifications();
-      },
+      action: onOpenNotifications,
     },
     {
       text: "Create",
@@ -66,13 +63,13 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
     },
     {
       text: "Profile",
-      icon: <PersonIcon />, // Material-UI иконка
+      icon: <PersonIcon />,
       path: "/myProfile",
     },
     {
       text: "Logout",
-      icon: <LogoutIcon />, // Material-UI иконка для Logout
-      action: handleLogout, // Выход из системы
+      icon: <LogoutIcon />,
+      action: handleLogout,
     },
   ];
 
@@ -115,7 +112,7 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
                   gap: { lg: 2, md: 1 },
                   "&:hover": {
                     backgroundColor: "rgba(0, 0, 0, 0.1)", // Цвет при наведении
-                    cursor: "pointer", // Изменение курсора
+                    cursor: "pointer",
                   },
                 }}
               >

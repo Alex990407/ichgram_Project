@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -8,14 +8,33 @@ import {
   Avatar,
   Box,
 } from "@mui/material";
+import useUserProfile from "../hooks/useUserProfile";
 
 const EditProfile = () => {
+  const { profile, loading, error, fetchProfile, updateProfile } =
+    useUserProfile();
+
   const [formData, setFormData] = useState({
-    username: "ichschool",
-    website: "bit.ly/3rpilbh",
-    about:
-      "• Гарантия помощи с трудоустройством в ведущие IT-компании\n• Выпускники зарабатывают от 45k евро\nБЕСПЛАТНАЯ",
+    username: "",
+    website: "",
+    about: "",
   });
+
+  // Загружаем данные профиля при загрузке компонента
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  // Обновляем локальное состояние, если профиль загружен
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        username: profile.username || "",
+        website: profile.website || "",
+        about: profile.description || "",
+      });
+    }
+  }, [profile]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -25,10 +44,22 @@ const EditProfile = () => {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Saved data:", formData);
+    await updateProfile({
+      username: formData.username,
+      website: formData.website,
+      description: formData.about,
+    });
   };
+
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
+  }
 
   return (
     <Container
@@ -105,22 +136,17 @@ const EditProfile = () => {
             variant="contained"
             component="label"
             sx={{
-              textTransform: "none", // Отключаем верхний регистр текста
-              fontSize: "14px", // Размер шрифта
-              fontWeight: "500", // Полужирный шрифт
-              width: "115px", // Фиксированная ширина
-              height: "32px", // Фиксированная высота
-              padding: "6px 0", // Вертикальные отступы
-              borderRadius: "8px", // Скругленные углы
-              backgroundColor: "rgba(0, 149, 246, 1)", // Цвет кнопки
-              color: "white", // Цвет текста
-              display: "flex", // Flex для центрирования
-              justifyContent: "center", // Центрируем содержимое по горизонтали
-              alignItems: "center", // Центрируем содержимое по вертикали
-              whiteSpace: "nowrap", // Запрещаем перенос текста
-              overflow: "hidden", // Скрываем выходящие элементы
+              textTransform: "none",
+              fontSize: "14px",
+              fontWeight: "500",
+              width: "115px",
+              height: "32px",
+              padding: "6px 0",
+              borderRadius: "8px",
+              backgroundColor: "rgba(0, 149, 246, 1)",
+              color: "white",
               "&:hover": {
-                backgroundColor: "rgba(0, 120, 200, 1)", // Цвет при наведении
+                backgroundColor: "rgba(0, 120, 200, 1)",
               },
             }}
           >
@@ -129,82 +155,50 @@ const EditProfile = () => {
           </Button>
         </Box>
 
-        {/* Поле Username */}
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
-          Username
-        </Typography>
+        {/* Поля формы */}
         <TextField
           fullWidth
           name="username"
+          label="Username"
           value={formData.username}
           onChange={handleChange}
           variant="outlined"
-          sx={{
-            marginBottom: 3,
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "8px",
-            },
-          }}
+          sx={{ marginBottom: 3 }}
         />
 
-        {/* Поле Website */}
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
-          Website
-        </Typography>
         <TextField
           fullWidth
           name="website"
+          label="Website"
           value={formData.website}
           onChange={handleChange}
           variant="outlined"
-          sx={{
-            marginBottom: 3,
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "8px",
-            },
-          }}
+          sx={{ marginBottom: 3 }}
         />
 
-        {/* Поле About */}
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
-          About
-        </Typography>
         <TextField
           fullWidth
           name="about"
+          label="About"
           value={formData.about}
           onChange={handleChange}
           variant="outlined"
           multiline
           rows={4}
-          helperText={`${formData.about.length} / 150`}
           inputProps={{ maxLength: 150 }}
-          sx={{
-            marginBottom: 4,
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "8px",
-            },
-          }}
+          sx={{ marginBottom: 4 }}
         />
 
         <Button
           type="submit"
           variant="contained"
           sx={{
-            maxWidth: "268px",
-            height: "32px",
-            borderRadius: "8px",
+            width: "100%",
             backgroundColor: "rgba(0, 149, 246, 1)",
             color: "white",
-            fontSize: "14px",
-            fontWeight: "500",
-            textTransform: "none",
-            marginBottom: "16px", // Отступ снизу
-            display: "block",
             "&:hover": {
               backgroundColor: "rgba(0, 120, 200, 1)",
             },
-            width: { xs: "100%", sm: "268px" }, // Адаптивность
           }}
         >
           Save

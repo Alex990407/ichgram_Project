@@ -15,19 +15,16 @@ import Messages from "./pages/Messages";
 import NotificationsPanel from "./components/NotificationsPanel";
 import SearchPanel from "./components/SearchPanel";
 import { Backdrop } from "@mui/material";
-import ProtectedRoute from "./utils/ProtectedRoute"; // Импортируем ProtectedRoute
-import PublicRoute from "./utils/PublicRoute"; // Импортируем PublicRoute
+import ProtectedRoute from "./utils/ProtectedRoute";
+import PublicRoute from "./utils/PublicRoute";
 
 const App = () => {
-  // Поднятое состояние для модального окна
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  // Ширина Sidebar
   const sidebarWidth = { xs: 60, sm: 80, md: 200, lg: 245 };
 
-  // Функции для управления модалкой
   const onOpenCreatePost = () => setIsCreatePostOpen(true);
   const onCloseCreatePost = () => setIsCreatePostOpen(false);
 
@@ -71,7 +68,7 @@ const App = () => {
                     onOpenSearch={onOpenSearch}
                   />
                 </ProtectedRoute>
-              } // Главная страница
+              }
             />
             <Route
               path="/messages"
@@ -85,7 +82,6 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/explore"
               element={
@@ -113,11 +109,13 @@ const App = () => {
             <Route
               path="/myProfile"
               element={
-                <AuthorizedProfile
-                  onOpenCreatePost={onOpenCreatePost}
-                  onOpenNotifications={onOpenNotifications}
-                  onOpenSearch={onOpenSearch}
-                />
+                <ProtectedRoute>
+                  <AuthorizedProfile
+                    onOpenCreatePost={onOpenCreatePost}
+                    onOpenNotifications={onOpenNotifications}
+                    onOpenSearch={onOpenSearch}
+                  />
+                </ProtectedRoute>
               }
             />
             <Route
@@ -140,11 +138,10 @@ const App = () => {
           }}
         />
 
-        {/* Панель уведомлений */}
         <NotificationsPanel
           open={isNotificationsOpen}
           onClose={onCloseNotifications}
-          sidebarWidth={sidebarWidth.lg} // Передаём ширину Sidebar
+          sidebarWidth={sidebarWidth.lg}
         />
 
         <SearchPanel
@@ -153,10 +150,8 @@ const App = () => {
           sidebarWidth={sidebarWidth.lg}
         />
 
-        {/*  модальное окно для создания поста */}
         <CreatePostModal open={isCreatePostOpen} onClose={onCloseCreatePost} />
 
-        {/* Footer */}
         <Footer />
       </div>
     </Router>

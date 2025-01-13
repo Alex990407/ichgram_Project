@@ -17,6 +17,15 @@ const useLogin = () => {
           password,
         }
       );
+
+      const { token } = response.data; // Предполагаем, что сервер возвращает `token`
+
+      // Сохраняем токен в localStorage
+
+      if (token) {
+        localStorage.setItem("authToken", token);
+      }
+
       setLoading(false);
       return response.data; // Возвращаем данные из API
     } catch (err) {

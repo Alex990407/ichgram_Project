@@ -23,6 +23,12 @@ const useRegister = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
+
+        // Проверяем статус 409 и устанавливаем специальное сообщение
+        if (response.status === 409) {
+          throw new Error(errorData.message || "User already exists");
+        }
+
         throw new Error(errorData.message || "Registration failed");
       }
 
@@ -36,7 +42,12 @@ const useRegister = () => {
     }
   };
 
-  return { register, loading, error, success };
+  // Метод для очистки ошибки
+  const clearError = () => {
+    setError(null);
+  };
+
+  return { register, loading, error, success, clearError };
 };
 
 export default useRegister;

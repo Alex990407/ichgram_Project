@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   Grid,
@@ -10,59 +10,20 @@ import {
 } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
-import CreatePostModal from "../components/CreatePostModal";
-// import axios from "axios";
+import useUserProfile from "../hooks/useUserProfile";
 
 const AuthorizedProfile = ({
   onOpenCreatePost,
   onOpenNotifications,
   onOpenSearch,
 }) => {
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Используем хук useUserProfile
+  const { profile, loading, error, fetchProfile } = useUserProfile();
+
   useEffect(() => {
-    // Закомментированный запрос на сервер
-    /*
-    const fetchProfile = async () => {
-      try {
-        const response = await axios.get("/api/profile");
-        setProfile(response.data.profile);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-        setLoading(false);
-      }
-    };
-    fetchProfile();
-    */
-
-    // Используем мок-данные
-    const mockProfile = {
-      username: "itcareerhub",
-      avatarUrl: "https://via.placeholder.com/150",
-      description:
-        "Гарантия помощи с трудоустройством в ведущие IT-компании\nВыпускники зарабатывают от 45k евро\nБЕСПЛАТНА ...",
-      postsCount: 129,
-      followers: 9993,
-      following: 59,
-      posts: [
-        {
-          id: 1,
-          imageUrl: "https://via.placeholder.com/300",
-          title: "Проект с участием выпускников IT Career Hub",
-        },
-        {
-          id: 2,
-          imageUrl: "https://via.placeholder.com/300",
-          title: "Получите инструкцию к поиску работы в Германии",
-        },
-      ],
-    };
-
-    setProfile(mockProfile);
-    setLoading(false);
+    fetchProfile(); // Загружаем данные профиля при монтировании
   }, []);
 
   if (loading) {
@@ -96,17 +57,30 @@ const AuthorizedProfile = ({
     );
   }
 
-  if (!profile) {
+  if (error) {
     return (
-      <Typography variant="h6" align="center" sx={{ mt: 5 }}>
-        No profile data available.
+      <Typography variant="h6" align="center" sx={{ mt: 5, color: "red" }}>
+        Failed to load profile: {error}
       </Typography>
     );
   }
 
+  // Заглушки для нового профиля
+  const defaultProfile = {
+    username: "New User",
+    avatarUrl: "https://via.placeholder.com/150",
+    description: "No description available",
+    postsCount: 0,
+    followers: 0,
+    following: 0,
+    posts: [],
+  };
+
+  const userProfile = profile || defaultProfile;
+
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
-      {/* Передаём функцию открытия модалки */}
+      {/* Sidebar */}
       <Sidebar
         onOpenCreatePost={onOpenCreatePost}
         onOpenNotifications={onOpenNotifications}
@@ -117,15 +91,15 @@ const AuthorizedProfile = ({
         <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>
           <Grid item xs={12} sm={3} textAlign="center">
             <Avatar
-              src={profile.avatarUrl || "https://via.placeholder.com/150"}
-              alt={profile.username}
+              src={userProfile.avatarUrl}
+              alt={userProfile.username}
               sx={{ width: 120, height: 120, margin: "0 auto" }}
             />
           </Grid>
           <Grid item xs={12} sm={9}>
             <Box display="flex" alignItems="center" gap={2} mb={2}>
               <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                {profile.username}
+                {userProfile.username}
               </Typography>
               <Button
                 variant="outlined"
@@ -150,24 +124,24 @@ const AuthorizedProfile = ({
             </Box>
             <Box display="flex" gap={3} mb={2}>
               <Typography>
-                <strong>{profile.postsCount || 0}</strong> posts
+                <strong>{userProfile.postsCount}</strong> posts
               </Typography>
               <Typography>
-                <strong>{profile.followers || 0}</strong> followers
+                <strong>{userProfile.followers}</strong> followers
               </Typography>
               <Typography>
-                <strong>{profile.following || 0}</strong> following
+                <strong>{userProfile.following}</strong> following
               </Typography>
             </Box>
             <Typography variant="body1" color="text.secondary">
-              {profile.description || "No description available"}
+              {userProfile.description}
             </Typography>
           </Grid>
         </Grid>
 
         {/* Posts Section */}
         <Grid container spacing={2} sx={{ display: "flex", flexWrap: "wrap" }}>
-          {profile.posts?.map((post) => (
+          {userProfile.posts?.map((post) => (
             <Grid item xs={12} sm={6} md={4} key={post.id} sx={{ flexGrow: 1 }}>
               <Box
                 component="img"
