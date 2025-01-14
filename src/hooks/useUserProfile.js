@@ -13,7 +13,6 @@ const useUserProfile = () => {
     setLoading(true);
     setError(null);
     try {
-      console.log(localStorage.getItem("authToken"));
       const response = await axios.get(apiBase, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -40,6 +39,28 @@ const useUserProfile = () => {
       setProfile(response.data); // Обновляем данные профиля в состоянии
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update profile");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Загрузить аватар
+  const uploadAvatar = async (file) => {
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.post(`${apiBase}/avatar`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setProfile(response.data); // Обновляем профиль с новым аватаром
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to upload avatar");
     } finally {
       setLoading(false);
     }
@@ -87,6 +108,7 @@ const useUserProfile = () => {
     error,
     fetchProfile,
     updateProfile,
+    uploadAvatar, // Добавляем функцию загрузки аватара
     createProfile,
     deleteProfile,
   };
