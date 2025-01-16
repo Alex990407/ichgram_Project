@@ -1,16 +1,16 @@
 import React from "react";
-import { Avatar, Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import AvatarComponent from "./AvatarComponent";
+import { useAvatar } from "../context/AvatarContext";
 
-const AvatarSection = ({
-  avatarPreview,
-  avatarUrl,
-  username,
-  about,
-  onAvatarChange,
-}) => {
-  const getFullAvatarUrl = (url) => {
-    if (!url) return ""; // Если url отсутствует, возвращаем пустую строку
-    return url.startsWith("/uploads/") ? `http://localhost:3003${url}` : url;
+const AvatarSection = () => {
+  const { uploadAvatar } = useAvatar();
+
+  const handleAvatarChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      await uploadAvatar(file); // Загрузка нового аватара
+    }
   };
 
   return (
@@ -25,31 +25,18 @@ const AvatarSection = ({
         borderRadius: "12px",
       }}
     >
-      {console.log("Avatar review", avatarPreview)}
-      {console.log("avatarUrl", avatarUrl)}
       <Box display="flex" alignItems="center" gap={2}>
-        <Avatar
-          src={
-            getFullAvatarUrl(avatarPreview) ||
-            getFullAvatarUrl(avatarUrl) ||
-            "https://via.placeholder.com/150"
-          }
-          alt="Profile"
-          sx={{
-            width: 80,
-            height: 80,
-          }}
-        />
+        <AvatarComponent size={80} />
         <Box>
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-            {username}
+            Username
           </Typography>
           <Typography
             variant="body2"
             color="text.secondary"
             sx={{ whiteSpace: "pre-line" }}
           >
-            {about?.split("\n")[0]}
+            User about section...
           </Typography>
         </Box>
       </Box>
@@ -72,7 +59,12 @@ const AvatarSection = ({
         }}
       >
         New photo
-        <input hidden accept="image/*" type="file" onChange={onAvatarChange} />
+        <input
+          hidden
+          accept="image/*"
+          type="file"
+          onChange={handleAvatarChange}
+        />
       </Button>
     </Box>
   );

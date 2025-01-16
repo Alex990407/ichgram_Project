@@ -24,6 +24,7 @@ const useLogin = () => {
 
       if (token) {
         localStorage.setItem("authToken", token);
+        console.log("Token saved in localStorage:", token);
       }
 
       setLoading(false);

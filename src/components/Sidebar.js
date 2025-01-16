@@ -23,7 +23,9 @@ import LogoutIcon from "@mui/icons-material/Logout";
 const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // Адаптивность для маленьких экранов
-  const sidebarWidth = isSmallScreen ? 60 : 245;
+  const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const sidebarWidth = isSmallScreen ? 60 : isMediumScreen ? 100 : 245;
 
   const navigate = useNavigate();
 
@@ -78,6 +80,7 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
       variant="permanent"
       sx={{
         width: sidebarWidth,
+        flexShrink: 0,
         "& .MuiDrawer-paper": {
           width: sidebarWidth,
           boxSizing: "border-box",
@@ -91,7 +94,7 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
         <IchgramIcon
           style={{
             width: "100%",
-            maxWidth: "150px",
+            maxWidth: isSmallScreen ? "40px" : "150px", // Адаптивный размер логотипа
             height: "auto",
           }}
         />
@@ -99,68 +102,30 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
 
       {/* Меню */}
       <List sx={{ width: "100%" }}>
-        {menuItems.map((item) => {
-          if (item.action) {
-            return (
-              <ListItem
-                key={item.text}
-                button
-                onClick={item.action}
-                sx={{
-                  justifyContent: { xs: "center", sm: "flex-start" },
-                  px: { xs: 1, sm: 2 },
-                  gap: { lg: 2, md: 1 },
-                  "&:hover": {
-                    backgroundColor: "rgba(0, 0, 0, 0.1)", // Цвет при наведении
-                    cursor: "pointer",
-                  },
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  sx={{ display: { xs: "none", sm: "block" } }}
-                />
-              </ListItem>
-            );
-          }
-          return (
-            <NavLink
-              to={item.path}
-              key={item.text}
-              style={{ textDecoration: "none", color: "inherit" }}
+        {menuItems.map((item) => (
+          <ListItem
+            key={item.text}
+            button
+            onClick={item.action || (() => navigate(item.path))}
+            sx={{
+              justifyContent: isSmallScreen ? "center" : "flex-start",
+              px: isSmallScreen ? 1 : 2,
+              gap: isMediumScreen ? 1 : 2,
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: "auto",
+                justifyContent: "center",
+              }}
             >
-              <ListItem
-                button
-                sx={{
-                  justifyContent: { xs: "center", sm: "flex-start" },
-                  px: { xs: 1, sm: 2 },
-                  gap: { lg: 2, md: 1 },
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  sx={{ display: { xs: "none", sm: "block" } }}
-                />
-              </ListItem>
-            </NavLink>
-          );
-        })}
+              {item.icon}
+            </ListItemIcon>
+            {!isSmallScreen && (
+              <ListItemText primary={item.text} sx={{ display: "block" }} />
+            )}
+          </ListItem>
+        ))}
       </List>
     </Drawer>
   );

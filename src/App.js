@@ -17,6 +17,7 @@ import SearchPanel from "./components/SearchPanel";
 import { Backdrop } from "@mui/material";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import PublicRoute from "./utils/PublicRoute";
+import { AvatarProvider } from "./context/AvatarContext";
 
 const App = () => {
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
@@ -35,126 +36,135 @@ const App = () => {
   const onCloseSearch = () => setIsSearchOpen(false);
 
   return (
-    <Router>
-      <div
-        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-      >
-        <div style={{ flex: 1, display: "flex" }}>
-          <Routes>
-            <Route
-              path="/signup"
-              element={
-                <PublicRoute>
-                  <Signup />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/login"
-              element={
-                <PublicRoute>
-                  <Login />
-                </PublicRoute>
-              }
-            />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <Home
-                    onOpenCreatePost={onOpenCreatePost}
-                    onOpenNotifications={onOpenNotifications}
-                    onOpenSearch={onOpenSearch}
-                  />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/messages"
-              element={
-                <ProtectedRoute>
-                  <Messages
-                    onOpenCreatePost={onOpenCreatePost}
-                    onOpenNotifications={onOpenNotifications}
-                    onOpenSearch={onOpenSearch}
-                  />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/explore"
-              element={
-                <ProtectedRoute>
-                  <Explore
-                    onOpenCreatePost={onOpenCreatePost}
-                    onOpenNotifications={onOpenNotifications}
-                    onOpenSearch={onOpenSearch}
-                  />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile/:userId"
-              element={
-                <ProtectedRoute>
-                  <Profile
-                    onOpenCreatePost={onOpenCreatePost}
-                    onOpenNotifications={onOpenNotifications}
-                    onOpenSearch={onOpenSearch}
-                  />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/myProfile"
-              element={
-                <ProtectedRoute>
-                  <AuthorizedProfile
-                    onOpenCreatePost={onOpenCreatePost}
-                    onOpenNotifications={onOpenNotifications}
-                    onOpenSearch={onOpenSearch}
-                  />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/edit-profile"
-              element={
-                <ProtectedRoute>
-                  <EditProfile />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
-
-        <Backdrop
-          open={isNotificationsOpen}
-          sx={{
-            zIndex: (theme) => theme.zIndex.drawer - 1,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+    <AvatarProvider>
+      <Router>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
           }}
-        />
+        >
+          <div style={{ flex: 1, display: "flex" }}>
+            <Routes>
+              <Route
+                path="/signup"
+                element={
+                  <PublicRoute>
+                    <Signup />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/login"
+                element={
+                  <PublicRoute>
+                    <Login />
+                  </PublicRoute>
+                }
+              />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Home
+                      onOpenCreatePost={onOpenCreatePost}
+                      onOpenNotifications={onOpenNotifications}
+                      onOpenSearch={onOpenSearch}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/messages"
+                element={
+                  <ProtectedRoute>
+                    <Messages
+                      onOpenCreatePost={onOpenCreatePost}
+                      onOpenNotifications={onOpenNotifications}
+                      onOpenSearch={onOpenSearch}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/explore"
+                element={
+                  <ProtectedRoute>
+                    <Explore
+                      onOpenCreatePost={onOpenCreatePost}
+                      onOpenNotifications={onOpenNotifications}
+                      onOpenSearch={onOpenSearch}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile/:userId"
+                element={
+                  <ProtectedRoute>
+                    <Profile
+                      onOpenCreatePost={onOpenCreatePost}
+                      onOpenNotifications={onOpenNotifications}
+                      onOpenSearch={onOpenSearch}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/myProfile"
+                element={
+                  <ProtectedRoute>
+                    <AuthorizedProfile
+                      onOpenCreatePost={onOpenCreatePost}
+                      onOpenNotifications={onOpenNotifications}
+                      onOpenSearch={onOpenSearch}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/edit-profile"
+                element={
+                  <ProtectedRoute>
+                    <EditProfile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </div>
 
-        <NotificationsPanel
-          open={isNotificationsOpen}
-          onClose={onCloseNotifications}
-          sidebarWidth={sidebarWidth.lg}
-        />
+          <Backdrop
+            open={isNotificationsOpen}
+            sx={{
+              zIndex: (theme) => theme.zIndex.drawer - 1,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+            }}
+          />
 
-        <SearchPanel
-          open={isSearchOpen}
-          onClose={onCloseSearch}
-          sidebarWidth={sidebarWidth.lg}
-        />
+          <NotificationsPanel
+            open={isNotificationsOpen}
+            onClose={onCloseNotifications}
+            sidebarWidth={sidebarWidth.lg}
+          />
 
-        <CreatePostModal open={isCreatePostOpen} onClose={onCloseCreatePost} />
+          <SearchPanel
+            open={isSearchOpen}
+            onClose={onCloseSearch}
+            sidebarWidth={sidebarWidth.lg}
+          />
 
-        <Footer />
-      </div>
-    </Router>
+          <CreatePostModal
+            open={isCreatePostOpen}
+            onClose={onCloseCreatePost}
+          />
+
+          <Footer />
+        </div>
+      </Router>
+    </AvatarProvider>
   );
 };
 
