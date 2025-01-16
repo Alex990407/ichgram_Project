@@ -12,6 +12,7 @@ import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
 import useUserProfile from "../hooks/useUserProfile";
 import { getFullAvatarUrl } from "../utils/urlHelpers";
+import AvatarComponent from "../components/AvatarComponent";
 
 const AuthorizedProfile = ({
   onOpenCreatePost,
@@ -91,11 +92,7 @@ const AuthorizedProfile = ({
         {/* User Profile Section */}
         <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>
           <Grid item xs={12} sm={3} textAlign="center">
-            <Avatar
-              src={getFullAvatarUrl(userProfile.avatarUrl)}
-              alt={userProfile.username}
-              sx={{ width: 120, height: 120, margin: "0 auto" }}
-            />
+            <AvatarComponent size={80} />
           </Grid>
           <Grid item xs={12} sm={9}>
             <Box display="flex" alignItems="center" gap={2} mb={2}>

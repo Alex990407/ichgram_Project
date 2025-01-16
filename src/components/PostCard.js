@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as CommentsIcon } from "../assets/Coments.svg";
 import { ReactComponent as LikeIcon } from "../assets/Like-icon.svg";
+import AvatarComponent from "./AvatarComponent";
+import { getFullAvatarUrl } from "../utils/urlHelpers";
 
 const PostCard = ({ post, onClick, onNavigate }) => {
   const navigate = useNavigate();
@@ -16,7 +18,7 @@ const PostCard = ({ post, onClick, onNavigate }) => {
   // Обработчик комментариев
   const handleCommentClick = (e) => {
     e.stopPropagation(); // Остановить всплытие
-    navigate(`/post/${post.id}#comments`); // Переход к комментариям
+    // navigate(/post/${post.id}#comments); // Переход к комментариям
   };
 
   return (
@@ -36,18 +38,9 @@ const PostCard = ({ post, onClick, onNavigate }) => {
     >
       {/* Заголовок карточки */}
       <div style={{ display: "flex", alignItems: "center", padding: "10px" }}>
-        <img
-          src={post.user?.avatar || "/default-avatar.png"}
-          alt="User Avatar"
-          style={{
-            width: "40px",
-            height: "40px",
-            borderRadius: "50%",
-            marginRight: "10px",
-          }}
-        />
+      <AvatarComponent size={35} />
         <span style={{ fontWeight: "bold", color: "#333", fontSize: "14px" }}>
-          {post.user?.username || "Unknown User"}
+          {post.username || "Unknown User"}
         </span>
       </div>
 
@@ -63,7 +56,7 @@ const PostCard = ({ post, onClick, onNavigate }) => {
         }}
       >
         <img
-          src={post.imageUrl}
+          src={getFullAvatarUrl(post.imageUrl)}
           alt="Post"
           style={{
             maxWidth: "100%",
@@ -138,7 +131,7 @@ const PostCard = ({ post, onClick, onNavigate }) => {
       {/* Описание поста */}
       <div style={{ padding: "0 16px 10px 16px" }}>
         <span style={{ fontWeight: "bold", fontSize: "14px" }}>
-          {post.user?.username || "Unknown User"}
+          {post.username || "Unknown User"}
         </span>
         <p style={{ fontSize: "14px", color: "#555", marginTop: "5px" }}>
           {post.description || "No description provided"}

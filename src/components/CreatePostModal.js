@@ -9,13 +9,12 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { ReactComponent as ClosePageIcon } from "../assets/Close-page.svg";
-import axios from "axios";
+import useCreatePost from "../hooks/useCreatePost";
 
 const CreatePostModal = ({ open, onClose }) => {
   const [caption, setCaption] = useState("");
   const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { createPost, loading, error } = useCreatePost();
 
   // Обработчик выбора файла
   const handleImageChange = (e) => {
@@ -26,41 +25,12 @@ const CreatePostModal = ({ open, onClose }) => {
 
   // Отправка данных на сервер
   const handleSubmit = async () => {
-    if (!image) {
-      setError("Please upload an image");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-
-    const formData = new FormData();
-    formData.append("image", image);
-    formData.append("title", caption);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:3003/api/posts/create",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Токен авторизации
-          },
-        }
-      );
-
-      // Если пост успешно создан
-      console.log("Post created:", response.data);
+    const success = await createPost(image, caption);
+    if (success) {
       alert("Post created successfully!");
       setCaption("");
       setImage(null);
       onClose(); // Закрываем модалку
-    } catch (err) {
-      console.error("Error creating post:", err.response?.data || err.message);
-      setError(err.response?.data?.message || "Failed to create post");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -91,7 +61,7 @@ const CreatePostModal = ({ open, onClose }) => {
             position: "absolute",
             top: "50%",
             right: "16px",
-            transform: "translateY(-50%)", // Центрирование кнопки по вертикали
+            transform: "translateY(-50%)",
             padding: 0,
             width: "24px",
             height: "24px",
@@ -103,7 +73,6 @@ const CreatePostModal = ({ open, onClose }) => {
 
       {/* Основное содержимое */}
       <Box display="flex" flexDirection="row" sx={{ height: "400px" }}>
-        {/* Левая часть для загрузки изображения */}
         <Box
           flex={1}
           display="flex"
@@ -124,11 +93,10 @@ const CreatePostModal = ({ open, onClose }) => {
             id="upload-image"
             style={{ display: "none" }}
             onChange={handleImageChange}
-            accept="image/*" // Ограничение выбора файлов
+            accept="image/*"
           />
         </Box>
 
-        {/* Правая часть для описания */}
         <Box flex={1} p={2} display="flex" flexDirection="column">
           <Typography variant="subtitle1" fontWeight="bold" mb={2}>
             Add a caption

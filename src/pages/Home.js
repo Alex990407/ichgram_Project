@@ -1,57 +1,41 @@
 import React, { useState, useEffect } from "react";
-import { Container, CircularProgress, Typography, Box } from "@mui/material";
+import { Container, CircularProgress, Typography } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 import PostCard from "../components/PostCard";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import PostModal from "../components/PostModal";
+import usePosts from "../hooks/usePosts";
 
 const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
+  const { fetchAllPosts, loading, error } = usePosts();
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  // Состояние для модального окна
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Функция для получения постов
-  const fetchPosts = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get("http://localhost:3003/api/posts", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      });
-      setPosts(response.data); // Убедитесь, что данные включают username, likes и comments
-      setLoading(false);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to fetch posts");
-      setLoading(false);
-    }
-  };
-
   // Загрузка постов при монтировании компонента
   useEffect(() => {
-    fetchPosts();
+    const loadPosts = async () => {
+      const fetchedPosts = await fetchAllPosts();
+      if (fetchedPosts) {
+        setPosts(fetchedPosts);
+      }
+    };
+    loadPosts();
   }, []);
 
-  // Обработчик клика на пост
   const handlePostClick = (postId) => {
-    setSelectedPostId(postId); // Устанавливаем ID выбранного поста
-    setIsPostModalOpen(true); // Открываем модальное окно
+    setSelectedPostId(postId);
+    setIsPostModalOpen(true);
   };
 
-  // Обработчик перехода на отдельную страницу
   const handleNavigateToPost = (postId) => {
-    navigate(`/post/${postId}`);
+    // navigate(/post/${postId});
   };
 
-  // Обработчик закрытия модального окна
   const handleClosePostModal = () => {
-    setIsPostModalOpen(false); // Закрываем модальное окно
-    setSelectedPostId(null); // Сбрасываем ID поста
+    setIsPostModalOpen(false);
+    setSelectedPostId(null);
   };
 
   if (loading)
@@ -71,33 +55,33 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
         onOpenSearch={onOpenSearch}
       />
 
-      <Container
-        maxWidth={false}
-        sx={{
-          flex: 1,
-          mt: 4,
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr", // Одна колонка на маленьких экранах
-            sm: "repeat(auto-fill, minmax(200px, 1fr))", // Карточки от 200px шириной
-            md: "repeat(auto-fill, minmax(300px, 1fr))", // Карточки от 300px шириной
-          },
-          gap: "16px",
-          padding: "16px",
-          width: "100%",
-        }}
-      >
+        <Container
+          maxWidth={false}
+          sx={{
+            flex: 1,
+            mt: 4,
+            display: "grid",
+            justifyContent: "center", // Центрируем карточки по горизонтали
+            gridTemplateColumns: {
+              xs: "1fr", // Одна колонка на маленьких экранах
+              sm: "repeat(auto-fill, minmax(400px, 1fr))", // Ширина карточки минимум 400px
+              md: "repeat(auto-fill, minmax(500px, 1fr))", // Ширина карточки минимум 500px
+            },
+            gap: "24px", // Увеличиваем расстояние между карточками
+            padding: "16px",
+            width: "100%",
+          }}
+        >
         {posts.map((post) => (
           <PostCard
             key={post._id}
             post={post}
-            onClick={() => handlePostClick(post._id)} // Открываем модальное окно
-            onNavigate={() => handleNavigateToPost(post._id)} // Добавляем переход
+            onClick={() => handlePostClick(post._id)}
+            onNavigate={() => handleNavigateToPost(post._id)}
           />
         ))}
       </Container>
 
-      {/* Модальное окно для поста */}
       {selectedPostId && (
         <PostModal
           open={isPostModalOpen}

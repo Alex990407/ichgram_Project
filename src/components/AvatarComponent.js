@@ -5,6 +5,7 @@ import { useAvatar } from "../context/AvatarContext";
 const AvatarComponent = ({ size = 40 }) => {
   const { avatarUrl, loading } = useAvatar();
 
+  console.log(avatarUrl);
   if (loading) {
     return <CircularProgress size={size} />;
   }

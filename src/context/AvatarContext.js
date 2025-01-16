@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { getFullAvatarUrl } from "../utils/urlHelpers";
 
 const AvatarContext = createContext();
 
@@ -22,7 +23,7 @@ export const AvatarProvider = ({ children }) => {
           },
         }
       );
-      setAvatarUrl(response.data.avatarUrl); // Предполагается, что сервер возвращает avatarUrl
+      setAvatarUrl(getFullAvatarUrl(response.data.avatarUrl)); // Предполагается, что сервер возвращает avatarUrl
     } catch (err) {
       setError(err.response?.data?.message || "Failed to load avatar");
     } finally {
