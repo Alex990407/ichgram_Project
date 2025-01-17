@@ -39,8 +39,27 @@ const usePosts = () => {
     }
   }, []);
 
-  return { createPost, fetchAllPosts, loading, error };
-};
+  // Новый метод для получения конкретного поста по ID
+  const fetchPostById = useCallback(async (postId) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `http://localhost:3003/api/posts/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      setLoading(false);
+      return response.data; // Возвращаем данные конкретного поста
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to fetch post");
+      setLoading(false);
+    }
+  }, []);
 
+  return { createPost, fetchAllPosts, fetchPostById, loading, error };
+};
 
 export default usePosts;

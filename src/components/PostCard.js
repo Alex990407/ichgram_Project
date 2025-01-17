@@ -18,7 +18,6 @@ const PostCard = ({ post, onClick, onNavigate }) => {
   // Обработчик комментариев
   const handleCommentClick = (e) => {
     e.stopPropagation(); // Остановить всплытие
-    // navigate(/post/${post.id}#comments); // Переход к комментариям
   };
 
   return (
@@ -34,11 +33,14 @@ const PostCard = ({ post, onClick, onNavigate }) => {
         transition: "transform 0.2s ease-in-out",
         backgroundColor: "#fff",
       }}
-      onClick={onClick} // Открытие модального окна
+      onClick={() => {
+        console.log("Card clicked with post ID:", post._id); // Логируем ID поста
+        onClick(post._id); // Передаем ID поста
+      }}
     >
       {/* Заголовок карточки */}
       <div style={{ display: "flex", alignItems: "center", padding: "10px" }}>
-      <AvatarComponent size={35} />
+        <AvatarComponent size={35} />
         <span style={{ fontWeight: "bold", color: "#333", fontSize: "14px" }}>
           {post.username || "Unknown User"}
         </span>
@@ -98,27 +100,6 @@ const PostCard = ({ post, onClick, onNavigate }) => {
         >
           <CommentsIcon style={{ marginRight: "5px" }} />
         </div>
-
-        {/* Переход на страницу поста */}
-        {onNavigate && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation(); // Останавливаем всплытие
-              onNavigate(); // Переход на страницу
-            }}
-            style={{
-              marginLeft: "auto",
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              padding: "5px 10px",
-              cursor: "pointer",
-            }}
-          >
-            View Post
-          </button>
-        )}
       </div>
 
       {/* Счётчик лайков */}
@@ -134,7 +115,7 @@ const PostCard = ({ post, onClick, onNavigate }) => {
           {post.username || "Unknown User"}
         </span>
         <p style={{ fontSize: "14px", color: "#555", marginTop: "5px" }}>
-          {post.description || "No description provided"}
+          {post.title || "No description provided"}
         </p>
       </div>
     </div>

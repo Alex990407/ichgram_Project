@@ -25,6 +25,7 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   }, []);
 
   const handlePostClick = (postId) => {
+    console.log("Post clicked in Home with ID:", postId);
     setSelectedPostId(postId);
     setIsPostModalOpen(true);
   };
@@ -55,29 +56,29 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
         onOpenSearch={onOpenSearch}
       />
 
-        <Container
-          maxWidth={false}
-          sx={{
-            flex: 1,
-            mt: 4,
-            display: "grid",
-            justifyContent: "center", // Центрируем карточки по горизонтали
-            gridTemplateColumns: {
-              xs: "1fr", // Одна колонка на маленьких экранах
-              sm: "repeat(auto-fill, minmax(400px, 1fr))", // Ширина карточки минимум 400px
-              md: "repeat(auto-fill, minmax(500px, 1fr))", // Ширина карточки минимум 500px
-            },
-            gap: "24px", // Увеличиваем расстояние между карточками
-            padding: "16px",
-            width: "100%",
-          }}
-        >
+      <Container
+        maxWidth={false}
+        sx={{
+          flex: 1,
+          mt: 4,
+          display: "grid",
+          justifyContent: "center", // Центрируем карточки по горизонтали
+          gridTemplateColumns: {
+            xs: "1fr", // Одна колонка на маленьких экранах
+            sm: "repeat(auto-fill, minmax(400px, 1fr))", // Ширина карточки минимум 400px
+            md: "repeat(auto-fill, minmax(500px, 1fr))", // Ширина карточки минимум 500px
+          },
+          gap: "24px", // Увеличиваем расстояние между карточками
+          padding: "16px",
+          width: "100%",
+        }}
+      >
         {posts.map((post) => (
           <PostCard
-            key={post._id}
+            key={post.id} // Измените здесь с `_id` на `id`
             post={post}
-            onClick={() => handlePostClick(post._id)}
-            onNavigate={() => handleNavigateToPost(post._id)}
+            onClick={() => handlePostClick(post.id)} // Измените здесь с `_id` на `id`
+            onNavigate={() => handleNavigateToPost(post.id)} // Измените здесь с `_id` на `id`
           />
         ))}
       </Container>
