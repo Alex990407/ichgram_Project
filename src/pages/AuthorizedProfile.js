@@ -1,17 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Grid,
   Box,
   Typography,
-  Avatar,
   Button,
   Skeleton,
 } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
 import useUserProfile from "../hooks/useUserProfile";
-import { getFullAvatarUrl } from "../utils/urlHelpers";
+import usePosts from "../hooks/usePosts";
 import AvatarComponent from "../components/AvatarComponent";
 
 const AuthorizedProfile = ({
@@ -20,76 +19,67 @@ const AuthorizedProfile = ({
   onOpenSearch,
 }) => {
   const navigate = useNavigate();
-
-  // Используем хук useUserProfile
-  const { profile, loading, error, fetchProfile } = useUserProfile();
+  const {
+    profile,
+    loading: profileLoading,
+    error: profileError,
+    fetchProfile,
+  } = useUserProfile();
+  const {
+    fetchUserPosts,
+    loading: postsLoading,
+    error: postsError,
+  } = usePosts();
+  const [userPosts, setUserPosts] = useState([]);
 
   useEffect(() => {
-    fetchProfile(); // Загружаем данные профиля при монтировании
+    fetchProfile();
   }, []);
 
-  if (loading) {
+  useEffect(() => {
+    if (profile?.userId?._id) {
+      const loadUserPosts = async () => {
+        try {
+          const userId = profile.userId._id; // Используем корректное поле
+          const posts = await fetchUserPosts(userId);
+          setUserPosts(posts || []);
+        } catch (err) {
+          console.error("Error fetching user posts:", err);
+        }
+      };
+      loadUserPosts();
+    }
+  }, [profile, fetchUserPosts]);
+
+  if (profileLoading || postsLoading) {
     return (
       <div style={{ display: "flex", minHeight: "100vh" }}>
         <Container sx={{ flex: 1, marginTop: 4 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={3}>
-              <Skeleton variant="circular" width={120} height={120} />
-            </Grid>
-            <Grid item xs={12} sm={9}>
-              <Skeleton variant="text" width={200} height={40} />
-              <Skeleton variant="text" width={300} height={20} />
-              <Skeleton variant="rectangular" width="100%" height={150} />
-            </Grid>
-          </Grid>
-          <Grid container spacing={2} sx={{ marginTop: 4 }}>
-            {[...Array(6)].map((_, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Skeleton
-                  variant="rectangular"
-                  width="100%"
-                  height={200}
-                  sx={{ borderRadius: 2 }}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <Skeleton variant="rectangular" width="100%" height={200} />
         </Container>
       </div>
     );
   }
 
-  if (error) {
+  if (profileError || postsError) {
     return (
       <Typography variant="h6" align="center" sx={{ mt: 5, color: "red" }}>
-        Failed to load profile: {error}
+        {profileError || postsError}
       </Typography>
     );
   }
 
-  // Заглушки для нового профиля
-  const defaultProfile = {
-    username: "New User",
-    avatarUrl: "https://via.placeholder.com/150",
-    description: "No description available",
-    postsCount: 0,
-    followers: 0,
-    following: 0,
-    posts: [],
-  };
-
-  const userProfile = profile || defaultProfile;
+  const postCount = userPosts.length;
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
-      {/* Sidebar */}
       <Sidebar
         onOpenCreatePost={onOpenCreatePost}
         onOpenNotifications={onOpenNotifications}
         onOpenSearch={onOpenSearch}
       />
       <Container sx={{ flex: 1, marginTop: 4 }}>
-        {/* User Profile Section */}
+        {/* Profile Section */}
         <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>
           <Grid item xs={12} sm={3} textAlign="center">
             <AvatarComponent size={80} />
@@ -97,7 +87,7 @@ const AuthorizedProfile = ({
           <Grid item xs={12} sm={9}>
             <Box display="flex" alignItems="center" gap={2} mb={2}>
               <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                {userProfile.username}
+                {profile?.username}
               </Typography>
               <Button
                 variant="outlined"
@@ -122,41 +112,54 @@ const AuthorizedProfile = ({
             </Box>
             <Box display="flex" gap={3} mb={2}>
               <Typography>
-                <strong>{userProfile.postsCount}</strong> posts
+                <strong>{postCount}</strong> posts
               </Typography>
               <Typography>
-                <strong>{userProfile.followers}</strong> followers
+                <strong>{profile?.followers}</strong> followers
               </Typography>
               <Typography>
-                <strong>{userProfile.following}</strong> following
+                <strong>{profile?.following}</strong> following
               </Typography>
             </Box>
             <Typography variant="body1" color="text.secondary">
-              {userProfile.description}
+              {profile?.description}
             </Typography>
           </Grid>
         </Grid>
 
         {/* Posts Section */}
         <Grid container spacing={2} sx={{ display: "flex", flexWrap: "wrap" }}>
-          {userProfile.posts?.map((post) => (
-            <Grid item xs={12} sm={6} md={4} key={post.id} sx={{ flexGrow: 1 }}>
-              <Box
-                component="img"
-                src={post.imageUrl}
-                alt={post.title}
-                sx={{
-                  width: "100%",
-                  borderRadius: 2,
-                  objectFit: "cover",
-                  transition: "transform 0.2s ease-in-out",
-                  ":hover": {
-                    transform: "scale(1.05)",
-                  },
-                }}
-              />
-            </Grid>
-          ))}
+          {userPosts.length > 0 ? (
+            userPosts.map((post) => (
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                key={post._id}
+                sx={{ flexGrow: 1 }}
+              >
+                <Box
+                  component="img"
+                  src={post.imageUrl || "https://via.placeholder.com/200"}
+                  alt={post.title || "No Title"}
+                  sx={{
+                    width: "100%",
+                    borderRadius: 2,
+                    objectFit: "cover",
+                    transition: "transform 0.2s ease-in-out",
+                    ":hover": {
+                      transform: "scale(1.05)",
+                    },
+                  }}
+                />
+              </Grid>
+            ))
+          ) : (
+            <Typography align="center" variant="h6" color="text.secondary">
+              No posts available.
+            </Typography>
+          )}
         </Grid>
       </Container>
     </div>

@@ -31,7 +31,6 @@ const usePosts = () => {
       setLoading(true);
       const response = await axios.get("http://localhost:3003/api/posts");
       setLoading(false);
-      console.log(response.data);
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch posts");
@@ -39,7 +38,6 @@ const usePosts = () => {
     }
   }, []);
 
-  // Новый метод для получения конкретного поста по ID
   const fetchPostById = useCallback(async (postId) => {
     try {
       setLoading(true);
@@ -52,14 +50,40 @@ const usePosts = () => {
         }
       );
       setLoading(false);
-      return response.data; // Возвращаем данные конкретного поста
+      return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch post");
       setLoading(false);
     }
   }, []);
 
-  return { createPost, fetchAllPosts, fetchPostById, loading, error };
+  const fetchUserPosts = useCallback(async (userId) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `http://localhost:3003/api/posts/user/${userId}`, // Исправляем URL
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      setLoading(false);
+      return response.data;
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to fetch user posts");
+      setLoading(false);
+    }
+  }, []);
+
+  return {
+    createPost,
+    fetchAllPosts,
+    fetchPostById,
+    fetchUserPosts,
+    loading,
+    error,
+  };
 };
 
 export default usePosts;

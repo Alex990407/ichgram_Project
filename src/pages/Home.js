@@ -68,17 +68,17 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
             sm: "repeat(auto-fill, minmax(400px, 1fr))", // Ширина карточки минимум 400px
             md: "repeat(auto-fill, minmax(500px, 1fr))", // Ширина карточки минимум 500px
           },
-          gap: "24px", // Увеличиваем расстояние между карточками
+          gap: "24px",
           padding: "16px",
           width: "100%",
         }}
       >
         {posts.map((post) => (
           <PostCard
-            key={post.id} // Измените здесь с `_id` на `id`
+            key={post.id}
             post={post}
-            onClick={() => handlePostClick(post.id)} // Измените здесь с `_id` на `id`
-            onNavigate={() => handleNavigateToPost(post.id)} // Измените здесь с `_id` на `id`
+            onClick={() => handlePostClick(post.id)}
+            onNavigate={() => handleNavigateToPost(post.id)}
           />
         ))}
       </Container>
