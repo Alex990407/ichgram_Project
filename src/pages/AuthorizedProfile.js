@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import useUserProfile from "../hooks/useUserProfile";
 import usePosts from "../hooks/usePosts";
 import AvatarComponent from "../components/AvatarComponent";
+import PostCard from "../components/PostCard";
 
 const AuthorizedProfile = ({
   onOpenCreatePost,
@@ -32,25 +33,45 @@ const AuthorizedProfile = ({
   } = usePosts();
   const [userPosts, setUserPosts] = useState([]);
 
+  // Fetch profile data
   useEffect(() => {
-    fetchProfile();
-  }, []);
+    const loadProfile = async () => {
+      try {
+        console.log("Fetching authorized user profile...");
+        if (!profile) {
+          await fetchProfile();
+        }
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+      }
+    };
+    loadProfile();
+  }, [fetchProfile, profile]);
 
+  // Fetch posts for the authorized user
   useEffect(() => {
-    if (profile?.userId?._id) {
+    if (profile?._id) {
       const loadUserPosts = async () => {
+        console.log("Attempting to fetch posts for userId:", profile._id);
         try {
-          const userId = profile.userId._id; // Используем корректное поле
-          const posts = await fetchUserPosts(userId);
-          setUserPosts(posts || []);
+          const posts = await fetchUserPosts(profile._id);
+          console.log("Fetched posts from API:", posts); // Лог результата API
+          if (posts && posts.posts) {
+            console.log("Setting posts:", posts.posts);
+            setUserPosts(posts.posts);
+          } else {
+            console.error("No posts found in the response.");
+            setUserPosts([]); // Обнуляем, если постов нет
+          }
         } catch (err) {
           console.error("Error fetching user posts:", err);
         }
       };
       loadUserPosts();
     }
-  }, [profile, fetchUserPosts]);
+  }, [profile?._id, fetchUserPosts]);
 
+  // Loading and error states
   if (profileLoading || postsLoading) {
     return (
       <div style={{ display: "flex", minHeight: "100vh" }}>
@@ -71,6 +92,7 @@ const AuthorizedProfile = ({
 
   const postCount = userPosts.length;
 
+  // Render the profile page
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar
@@ -82,7 +104,7 @@ const AuthorizedProfile = ({
         {/* Profile Section */}
         <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>
           <Grid item xs={12} sm={3} textAlign="center">
-            <AvatarComponent size={80} />
+            <AvatarComponent size={80} avatarUrl={profile?.avatarUrl} />
           </Grid>
           <Grid item xs={12} sm={9}>
             <Box display="flex" alignItems="center" gap={2} mb={2}>
@@ -128,30 +150,13 @@ const AuthorizedProfile = ({
         </Grid>
 
         {/* Posts Section */}
-        <Grid container spacing={2} sx={{ display: "flex", flexWrap: "wrap" }}>
+        <Grid container spacing={2}>
           {userPosts.length > 0 ? (
             userPosts.map((post) => (
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                key={post._id}
-                sx={{ flexGrow: 1 }}
-              >
-                <Box
-                  component="img"
-                  src={post.imageUrl || "https://via.placeholder.com/200"}
-                  alt={post.title || "No Title"}
-                  sx={{
-                    width: "100%",
-                    borderRadius: 2,
-                    objectFit: "cover",
-                    transition: "transform 0.2s ease-in-out",
-                    ":hover": {
-                      transform: "scale(1.05)",
-                    },
-                  }}
+              <Grid item xs={12} sm={6} md={4} key={post._id}>
+                <PostCard
+                  post={post}
+                  onClick={(postId) => console.log(`Post clicked: ${postId}`)}
                 />
               </Grid>
             ))
@@ -167,3 +172,205 @@ const AuthorizedProfile = ({
 };
 
 export default AuthorizedProfile;
+
+// import React, { useEffect, useState } from "react";
+// import {
+//   Container,
+//   Grid,
+//   Box,
+//   Typography,
+//   Button,
+//   Skeleton,
+// } from "@mui/material";
+// import Sidebar from "../components/Sidebar";
+// import { useNavigate } from "react-router-dom";
+// import useUserProfile from "../hooks/useUserProfile";
+// import usePosts from "../hooks/usePosts";
+// import AvatarComponent from "../components/AvatarComponent";
+// import PostModal from "../components/PostModal";
+
+// const AuthorizedProfile = ({
+//   onOpenCreatePost,
+//   onOpenNotifications,
+//   onOpenSearch,
+// }) => {
+//   const navigate = useNavigate();
+//   const {
+//     profile,
+//     loading: profileLoading,
+//     error: profileError,
+//     fetchProfile,
+//   } = useUserProfile();
+//   const {
+//     fetchUserPosts,
+//     loading: postsLoading,
+//     error: postsError,
+//   } = usePosts();
+//   const [userPosts, setUserPosts] = useState([]);
+//   const [selectedPostId, setSelectedPostId] = useState(null);
+//   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+
+//   useEffect(() => {
+//     fetchProfile();
+//   }, []);
+
+//   useEffect(() => {
+//     if (profile?.userId?._id) {
+//       const loadUserPosts = async () => {
+//         try {
+//           const userId = profile.userId._id; // Используем корректное поле
+//           console.log("userId", userId);
+//           const posts = await fetchUserPosts(userId);
+//           console.log("posts:->>>>>", posts);
+//           setUserPosts(posts.posts || []);
+//         } catch (err) {
+//           console.error("Error fetching user posts:", err);
+//         }
+//       };
+//       loadUserPosts();
+//     }
+//   }, [profile, fetchUserPosts]);
+
+//   const handlePostClick = (postId) => {
+//     setSelectedPostId(postId);
+//     setIsPostModalOpen(true);
+//   };
+
+//   const handleClosePostModal = () => {
+//     setSelectedPostId(null);
+//     setIsPostModalOpen(false);
+//   };
+
+//   if (profileLoading || postsLoading) {
+//     return (
+//       <div style={{ display: "flex", minHeight: "100vh" }}>
+//         <Container sx={{ flex: 1, marginTop: 4 }}>
+//           <Skeleton variant="rectangular" width="100%" height={200} />
+//         </Container>
+//       </div>
+//     );
+//   }
+
+//   if (profileError || postsError) {
+//     return (
+//       <Typography variant="h6" align="center" sx={{ mt: 5, color: "red" }}>
+//         {profileError || postsError}
+//       </Typography>
+//     );
+//   }
+
+//   const postCount = userPosts.length;
+
+//   return (
+//     <div style={{ display: "flex", minHeight: "100vh" }}>
+//       <Sidebar
+//         onOpenCreatePost={onOpenCreatePost}
+//         onOpenNotifications={onOpenNotifications}
+//         onOpenSearch={onOpenSearch}
+//       />
+//       <Container sx={{ flex: 1, marginTop: 4 }}>
+//         {/* Profile Section */}
+//         <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>
+//           <Grid item xs={12} sm={3} textAlign="center">
+//             <AvatarComponent size={80} />
+//           </Grid>
+//           <Grid item xs={12} sm={9}>
+//             <Box display="flex" alignItems="center" gap={2} mb={2}>
+//               <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+//                 {profile?.username}
+//               </Typography>
+//               <Button
+//                 variant="outlined"
+//                 onClick={() => navigate("/edit-profile")}
+//                 sx={{
+//                   width: { xs: "100px", sm: "168px" },
+//                   height: "32px",
+//                   borderRadius: "8px",
+//                   backgroundColor: "rgba(239, 239, 239, 1)",
+//                   color: "rgba(0, 0, 0, 1)",
+//                   fontFamily: "Roboto",
+//                   textAlign: "center",
+//                   fontSize: "14px",
+//                   border: "none",
+//                   "&:hover": {
+//                     backgroundColor: "rgba(220, 220, 220, 1)",
+//                   },
+//                 }}
+//               >
+//                 Edit Profile
+//               </Button>
+//             </Box>
+//             <Box display="flex" gap={3} mb={2}>
+//               <Typography>
+//                 <strong>{postCount}</strong> posts
+//               </Typography>
+//               <Typography>
+//                 <strong>{profile?.followers}</strong> followers
+//               </Typography>
+//               <Typography>
+//                 <strong>{profile?.following}</strong> following
+//               </Typography>
+//             </Box>
+//             <Typography variant="body1" color="text.secondary">
+//               {profile?.description}
+//             </Typography>
+//           </Grid>
+//         </Grid>
+
+//         {/* Posts Section */}
+//         <Grid container spacing={2} sx={{ display: "flex", flexWrap: "wrap" }}>
+//           {userPosts.length > 0 ? (
+//             userPosts.map((post) => (
+//               <Grid
+//                 item
+//                 xs={12}
+//                 sm={6}
+//                 md={4}
+//                 key={post._id}
+//                 sx={{ flexGrow: 1 }}
+//               >
+//                 <Box
+//                   component="img"
+//                   src={
+//                     post.imageUrl
+//                       ? `${
+//                           process.env.REACT_APP_API_URL ||
+//                           "http://localhost:3003"
+//                         }${post.imageUrl}`
+//                       : "https://via.placeholder.com/200"
+//                   }
+//                   alt={post.title || "No Title"}
+//                   sx={{
+//                     width: "100%",
+//                     borderRadius: 2,
+//                     objectFit: "cover",
+//                     transition: "transform 0.2s ease-in-out",
+//                     ":hover": {
+//                       transform: "scale(1.05)",
+//                     },
+//                   }}
+//                   onClick={() => handlePostClick(post._id)} // Открытие модального окна
+//                 />
+//               </Grid>
+//             ))
+//           ) : (
+//             <Typography align="center" variant="h6" color="text.secondary">
+//               No posts available.
+//             </Typography>
+//           )}
+//         </Grid>
+//       </Container>
+
+//       {/* Post Modal */}
+//       {selectedPostId && (
+//         <PostModal
+//           open={isPostModalOpen}
+//           onClose={handleClosePostModal}
+//           postId={selectedPostId}
+//         />
+//       )}
+//     </div>
+//   );
+// };
+
+// export default AuthorizedProfile;
