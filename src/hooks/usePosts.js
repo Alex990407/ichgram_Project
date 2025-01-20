@@ -59,7 +59,10 @@ const usePosts = () => {
   }, []);
 
   const fetchUserPosts = useCallback(async (userId) => {
-    console.log("Fetching posts for userId in usePosts hook:", userId); // Лог userId
+    if (!userId) {
+      console.error("No userId provided for fetching posts.");
+      return [];
+    }
     try {
       setLoading(true);
       const response = await axios.get(
@@ -70,13 +73,14 @@ const usePosts = () => {
           },
         }
       );
-      console.log("API response for posts:", response.data); // Лог ответа API
+      console.log("API response for posts:", response.data);
       setLoading(false);
       return response.data;
     } catch (err) {
       console.error("Error fetching user posts in usePosts:", err);
       setError(err.response?.data?.message || "Failed to fetch user posts");
       setLoading(false);
+      return [];
     }
   }, []);
 
