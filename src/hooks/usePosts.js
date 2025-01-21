@@ -31,7 +31,7 @@ const usePosts = () => {
       setLoading(true);
       const response = await axios.get("http://localhost:3003/api/posts");
       setLoading(false);
-      console.log(response.data);
+      console.log("fetchPosts-:>>>>>", response.data);
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch posts");
@@ -39,8 +39,59 @@ const usePosts = () => {
     }
   }, []);
 
-  return { createPost, fetchAllPosts, loading, error };
-};
+  const fetchPostById = useCallback(async (postId) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `http://localhost:3003/api/posts/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      setLoading(false);
+      return response.data;
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to fetch post");
+      setLoading(false);
+    }
+  }, []);
 
+  const fetchUserPosts = useCallback(async (userId) => {
+    if (!userId) {
+      console.error("No userId provided for fetching posts.");
+      return [];
+    }
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `http://localhost:3003/api/posts/user/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      console.log("API response for posts:", response.data);
+      setLoading(false);
+      return response.data;
+    } catch (err) {
+      console.error("Error fetching user posts in usePosts:", err);
+      setError(err.response?.data?.message || "Failed to fetch user posts");
+      setLoading(false);
+      return [];
+    }
+  }, []);
+
+  return {
+    createPost,
+    fetchAllPosts,
+    fetchPostById,
+    fetchUserPosts,
+    loading,
+    error,
+  };
+};
 
 export default usePosts;

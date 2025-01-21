@@ -7,6 +7,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { ReactComponent as ClosePageIcon } from "../assets/Close-page.svg";
+import { getFullAvatarUrl } from "../utils/urlHelpers";
 import axios from "axios";
 
 const PostModal = ({ open, onClose, postId }) => {
@@ -97,7 +98,7 @@ const PostModal = ({ open, onClose, postId }) => {
               }}
             >
               <img
-                src={post.imageUrl}
+                src={getFullAvatarUrl(post.imageUrl)}
                 alt="Post"
                 style={{
                   maxWidth: "100%",

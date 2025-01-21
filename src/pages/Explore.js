@@ -22,6 +22,9 @@ const Explore = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
     //   }
     // };
     // fetchPosts();
+
+    // Эти Мок-данные мы заменим позже на отображение рандомных постов по запросу на Backend
+
     const mockPosts = [
       { id: 1, imageComponent: <Post1 /> },
       { id: 2, imageUrl: simpsonImage },
