@@ -49,12 +49,6 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
-      <Sidebar
-        onOpenCreatePost={onOpenCreatePost}
-        onOpenNotifications={onOpenNotifications}
-        onOpenSearch={onOpenSearch}
-      />
-
         <Container
           maxWidth={false}
           sx={{

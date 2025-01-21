@@ -8,13 +8,77 @@ import {
   Button,
   Skeleton,
 } from "@mui/material";
+import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
 import useUserProfile from "../hooks/useUserProfile";
-import usePosts from "../hooks/usePosts";
+import { getFullAvatarUrl } from "../utils/urlHelpers";
+import AvatarComponent from "../components/AvatarComponent";
 
-const AuthorizedProfile = (props) => {
-  const { profile, fetchProfile } = useUserProfile();
-  const { fetchUserPosts } = usePosts();
+const AuthorizedProfile = ({
+  onOpenCreatePost,
+  onOpenNotifications,
+  onOpenSearch,
+}) => {
+  const navigate = useNavigate();
+
+  // Используем хук useUserProfile
+  const { profile, loading, error, fetchProfile } = useUserProfile();
+
+  useEffect(() => {
+    fetchProfile(); // Загружаем данные профиля при монтировании
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{ display: "flex", minHeight: "100vh" }}>
+        <Container sx={{ flex: 1, marginTop: 4 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={3}>
+              <Skeleton variant="circular" width={120} height={120} />
+            </Grid>
+            <Grid item xs={12} sm={9}>
+              <Skeleton variant="text" width={200} height={40} />
+              <Skeleton variant="text" width={300} height={20} />
+              <Skeleton variant="rectangular" width="100%" height={150} />
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} sx={{ marginTop: 4 }}>
+            {[...Array(6)].map((_, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Skeleton
+                  variant="rectangular"
+                  width="100%"
+                  height={200}
+                  sx={{ borderRadius: 2 }}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Typography variant="h6" align="center" sx={{ mt: 5, color: "red" }}>
+        Failed to load profile: {error}
+      </Typography>
+    );
+  }
+
+  // Заглушки для нового профиля
+  const defaultProfile = {
+    username: "New User",
+    avatarUrl: "https://via.placeholder.com/150",
+    description: "No description available",
+    postsCount: 0,
+    followers: 0,
+    following: 0,
+    posts: [],
+  };
+
+  const userProfile = profile || defaultProfile;
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
