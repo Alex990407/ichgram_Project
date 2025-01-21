@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Container, CircularProgress, Typography } from "@mui/material";
+import { Container, CircularProgress, Typography, Box } from "@mui/material";
 import PostCard from "../components/PostCard";
-import { useNavigate } from "react-router-dom";
 import PostModal from "../components/PostModal";
 import usePosts from "../hooks/usePosts";
 
 const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   const { fetchAllPosts, loading, error } = usePosts();
   const [posts, setPosts] = useState([]);
-  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [selectedPost, setSelectedPost] = useState(null);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-  const navigate = useNavigate();
 
   // Загрузка постов при монтировании компонента
   useEffect(() => {
@@ -23,19 +21,14 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
     loadPosts();
   }, []);
 
-  const handlePostClick = (postId) => {
-    console.log("Post clicked in Home with ID:", postId);
-    setSelectedPostId(postId);
+  const handlePostClick = (post) => {
+    setSelectedPost(post);
     setIsPostModalOpen(true);
-  };
-
-  const handleNavigateToPost = (postId) => {
-    // navigate(/post/${postId});
   };
 
   const handleClosePostModal = () => {
     setIsPostModalOpen(false);
-    setSelectedPostId(null);
+    setSelectedPost(null);
   };
 
   if (loading)
@@ -48,42 +41,33 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
     );
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-        <Container
-          maxWidth={false}
-          sx={{
-            flex: 1,
-            mt: 4,
-            display: "grid",
-            justifyContent: "center", // Центрируем карточки по горизонтали
-            gridTemplateColumns: {
-              xs: "1fr", // Одна колонка на маленьких экранах
-              sm: "repeat(auto-fill, minmax(400px, 1fr))", // Ширина карточки минимум 400px
-              md: "repeat(auto-fill, minmax(500px, 1fr))", // Ширина карточки минимум 500px
-            },
-            gap: "24px", // Увеличиваем расстояние между карточками
-            padding: "16px",
-            width: "100%",
-          }}
-        >
-        {posts.map((post) => (
-          <PostCard
-            key={post.id}
-            post={post}
-            onClick={() => handlePostClick(post.id)}
-            onNavigate={() => handleNavigateToPost(post.id)}
-          />
-        ))}
-      </Container>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        minHeight: "100vh",
+        padding: "16px",
+        gap: "24px",
+        backgroundColor: "#f8f9fa",
+      }}
+    >
+      {posts.map((post) => (
+        <PostCard
+          key={post.id}
+          post={post}
+          onClick={() => handlePostClick(post)}
+        />
+      ))}
 
-      {selectedPostId && (
+      {selectedPost && (
         <PostModal
           open={isPostModalOpen}
           onClose={handleClosePostModal}
-          postId={selectedPostId}
+          post={selectedPost}
         />
       )}
-    </div>
+    </Box>
   );
 };
 

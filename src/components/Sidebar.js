@@ -19,16 +19,20 @@ import { ReactComponent as CreateIcon } from "../assets/sidebarIcons/Create.svg"
 import { ReactComponent as IchgramIcon } from "../assets/ICHGRAM.svg";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useUserContext } from "../context/UserContext";
 
 const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // Адаптивность для маленьких экранов
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const sidebarWidth = isSmallScreen ? 60 : isMediumScreen ? 100 : 245;
 
   const navigate = useNavigate();
 
+  const { profile } = useUserContext(); // Получаем данные профиля из контекста
+
+  console.log('SIDEBAR->>>', profile);
   const handleLogout = () => {
     // Удаляем токен из localStorage
     localStorage.removeItem("authToken");
@@ -66,7 +70,7 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
     {
       text: "Profile",
       icon: <PersonIcon />,
-      path: "/myProfile",
+      path: `/myProfile/${profile?.userId._id || "myProfile"}`,
     },
     {
       text: "Logout",
@@ -94,7 +98,7 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
         <IchgramIcon
           style={{
             width: "100%",
-            maxWidth: isSmallScreen ? "40px" : "150px", // Адаптивный размер логотипа
+            maxWidth: isSmallScreen ? "40px" : "150px",
             height: "auto",
           }}
         />

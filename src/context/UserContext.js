@@ -1,17 +1,22 @@
-import { useState, useCallback  } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { getFullAvatarUrl } from "../utils/urlHelpers";
 
-const useUserProfile = () => {
+const UserContext = createContext();
+
+export const UserProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const apiBase = "http://localhost:3003/api/profiles";
 
-  // Получить данные текущего авторизованного пользователя
-  const fetchProfile = useCallback(async () => {
+  // Получение данных профиля авторизованного пользователя
+  const fetchProfile = async () => {
     setLoading(true);
     setError(null);
+
     try {
       const response = await axios.get(apiBase, {
         headers: {
@@ -19,15 +24,17 @@ const useUserProfile = () => {
         },
       });
       setProfile(response.data);
+      
+      setAvatarUrl(getFullAvatarUrl(response.data.avatarUrl));
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch profile");
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
-  // Получить данные профиля по userId
-  const fetchProfileById = useCallback(async (userId) => {
+  // Получение данных профиля по ID пользователя
+  const fetchProfileById = async (userId) => {
     setLoading(true);
     setError(null);
     try {
@@ -37,14 +44,15 @@ const useUserProfile = () => {
         },
       });
       setProfile(response.data);
+      setAvatarUrl(getFullAvatarUrl(response.data.avatarUrl));
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch profile by ID");
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
-  // Обновить данные текущего профиля
+  // Обновление профиля
   const updateProfile = async (updates) => {
     setLoading(true);
     setError(null);
@@ -62,7 +70,7 @@ const useUserProfile = () => {
     }
   };
 
-  // Загрузить аватар
+  // Загрузка нового аватара
   const uploadAvatar = async (file) => {
     const formData = new FormData();
     formData.append("avatar", file);
@@ -76,7 +84,7 @@ const useUserProfile = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      setProfile(response.data);
+      setAvatarUrl(getFullAvatarUrl(response.data.avatarUrl));
     } catch (err) {
       setError(err.response?.data?.message || "Failed to upload avatar");
     } finally {
@@ -84,15 +92,27 @@ const useUserProfile = () => {
     }
   };
 
-  return {
-    profile,
-    loading,
-    error,
-    fetchProfile,
-    fetchProfileById,
-    updateProfile,
-    uploadAvatar,
-  };
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  return (
+    <UserContext.Provider
+      value={{
+        profile,
+        avatarUrl,
+        loading,
+        error,
+        fetchProfile,
+        fetchProfileById,
+        updateProfile,
+        uploadAvatar,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
 };
 
-export default useUserProfile;
+// Хук для использования контекста
+export const useUserContext = () => useContext(UserContext);

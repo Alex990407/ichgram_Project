@@ -10,21 +10,6 @@ const Explore = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Запрос на сервер
-    // const fetchPosts = async () => {
-    //   try {
-    //     const response = await axios.get("/api/posts/explore"); // Запрос к API
-    //     setPosts(response.data.posts); // Сохраняем посты в стейт
-    //     setLoading(false);
-    //   } catch (error) {
-    //     console.error("Error fetching explore posts:", error);
-    //     setLoading(false);
-    //   }
-    // };
-    // fetchPosts();
-
-    // Эти Мок-данные мы заменим позже на отображение рандомных постов по запросу на Backend
-
     const mockPosts = [
       { id: 1, imageComponent: <Post1 /> },
       { id: 2, imageUrl: simpsonImage },

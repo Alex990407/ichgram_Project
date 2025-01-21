@@ -63,6 +63,7 @@ const usePosts = () => {
       console.error("No userId provided for fetching posts.");
       return [];
     }
+
     try {
       setLoading(true);
       const response = await axios.get(

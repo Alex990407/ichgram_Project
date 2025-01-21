@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Dialog,
   Box,
@@ -8,41 +8,11 @@ import {
 } from "@mui/material";
 import { ReactComponent as ClosePageIcon } from "../assets/Close-page.svg";
 import { getFullAvatarUrl } from "../utils/urlHelpers";
-import axios from "axios";
 
-const PostModal = ({ open, onClose, postId }) => {
-  const [post, setPost] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (postId && open) {
-      fetchPost();
-    }
-  }, [postId, open]);
-
-  const fetchPost = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const response = await axios.get(
-        `http://localhost:3003/api/posts/${postId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        }
-      );
-      setPost(response.data);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to load post");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const PostModal = ({ open, onClose, post }) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+      {/* Header */}
       <Box
         sx={{
           display: "flex",
@@ -77,16 +47,13 @@ const PostModal = ({ open, onClose, postId }) => {
         </IconButton>
       </Box>
 
+      {/* Content */}
       <Box display="flex" flexDirection="row" sx={{ height: "400px" }}>
-        {loading ? (
+        {!post ? (
           <CircularProgress style={{ margin: "auto" }} />
-        ) : error ? (
-          <Typography color="error" align="center">
-            {error}
-          </Typography>
-        ) : post ? (
+        ) : (
           <>
-            {/* Левая часть: изображение поста */}
+            {/* Left Section: Post Image */}
             <Box
               flex={1}
               sx={{
@@ -108,7 +75,7 @@ const PostModal = ({ open, onClose, postId }) => {
               />
             </Box>
 
-            {/* Правая часть: информация о посте */}
+            {/* Right Section: Post Details */}
             <Box flex={1} p={2} display="flex" flexDirection="column">
               <Typography variant="h6" fontWeight="bold">
                 {post.username}
@@ -120,7 +87,7 @@ const PostModal = ({ open, onClose, postId }) => {
                 {post.likes} Likes | {post.comments?.length || 0} Comments
               </Typography>
 
-              {/* Комментарии */}
+              {/* Comments */}
               <Box mt={2}>
                 {post.comments?.map((comment, index) => (
                   <Box key={index} sx={{ mb: 1 }}>
@@ -135,8 +102,6 @@ const PostModal = ({ open, onClose, postId }) => {
               </Box>
             </Box>
           </>
-        ) : (
-          <Typography align="center">No data available</Typography>
         )}
       </Box>
     </Dialog>

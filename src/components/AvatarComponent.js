@@ -1,13 +1,13 @@
 import React from "react";
 import { Avatar, CircularProgress } from "@mui/material";
-import { useAvatar } from "../context/AvatarContext";
+import { useUserContext } from "../context/UserContext";
 import { getFullAvatarUrl } from "../utils/urlHelpers";
 
 const AvatarComponent = ({ size = 40, avatarUrl: propAvatarUrl }) => {
-  const { avatarUrl: contextAvatarUrl, loading } = useAvatar();
+  const { avatarUrl: contextAvatarUrl, loading } = useUserContext();
 
   // Используем пропс avatarUrl, если он передан, иначе берем из контекста
-  const avatarUrl = getFullAvatarUrl(propAvatarUrl) || contextAvatarUrl;
+  const avatarUrl = propAvatarUrl ? getFullAvatarUrl(propAvatarUrl) : contextAvatarUrl;
 
   console.log(avatarUrl);
   if (loading && !propAvatarUrl) {

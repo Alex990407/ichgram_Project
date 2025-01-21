@@ -1,10 +1,10 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import AvatarComponent from "./AvatarComponent";
-import { useAvatar } from "../context/AvatarContext";
+import { useUserContext } from "../context/UserContext";
 
 const AvatarSection = () => {
-  const { uploadAvatar } = useAvatar();
+  const { profile, uploadAvatar } = useUserContext();
 
   const handleAvatarChange = async (event) => {
     const file = event.target.files[0];
@@ -29,14 +29,14 @@ const AvatarSection = () => {
         <AvatarComponent size={80} />
         <Box>
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-            Username
+            {profile?.username || "Username"}
           </Typography>
           <Typography
             variant="body2"
             color="text.secondary"
             sx={{ whiteSpace: "pre-line" }}
           >
-            User about section...
+            {profile?.about || "User about section..."}
           </Typography>
         </Box>
       </Box>

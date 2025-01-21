@@ -21,7 +21,7 @@ import NotificationsPanel from "./components/NotificationsPanel";
 import SearchPanel from "./components/SearchPanel";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import PublicRoute from "./utils/PublicRoute";
-import { AvatarProvider } from "./context/AvatarContext";
+import { UserProvider  } from "./context/UserContext";
 
 const App = () => {
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
@@ -40,7 +40,7 @@ const App = () => {
   const onCloseSearch = () => setIsSearchOpen(false);
 
   return (
-    <AvatarProvider>
+    <UserProvider>
       <Router>
         <Box display="flex" minHeight="100vh">
           {/* Sidebar */}
@@ -52,7 +52,7 @@ const App = () => {
           />
 
           {/* Main Content */}
-          <Box flex={1} ml={`${sidebarWidth}px`}>
+          <Box flex={1}>
             <Routes>
               <Route
                 path="/signup"
@@ -120,7 +120,7 @@ const App = () => {
                 }
               />
               <Route
-                path="/myProfile"
+                path="/myProfile/:userId"
                 element={
                   <ProtectedRoute>
                     <AuthorizedProfile
@@ -165,7 +165,7 @@ const App = () => {
         <CreatePostModal open={isCreatePostOpen} onClose={onCloseCreatePost} />
         <Footer />
       </Router>
-    </AvatarProvider>
+    </UserProvider>
   );
 };
 
