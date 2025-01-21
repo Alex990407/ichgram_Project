@@ -8,7 +8,6 @@ import {
   Button,
   Skeleton,
 } from "@mui/material";
-import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
 import useUserProfile from "../hooks/useUserProfile";
 import { getFullAvatarUrl } from "../utils/urlHelpers";
@@ -82,12 +81,6 @@ const AuthorizedProfile = ({
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
-      {/* Sidebar */}
-      <Sidebar
-        onOpenCreatePost={onOpenCreatePost}
-        onOpenNotifications={onOpenNotifications}
-        onOpenSearch={onOpenSearch}
-      />
       <Container sx={{ flex: 1, marginTop: 4 }}>
         {/* User Profile Section */}
         <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>

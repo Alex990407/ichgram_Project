@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
 import {
   Avatar,
   Container,
@@ -74,11 +73,6 @@ const Profile = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
-      <Sidebar
-        onOpenCreatePost={onOpenCreatePost}
-        onOpenNotifications={onOpenNotifications}
-        onOpenSearch={onOpenSearch}
-      />
       <Container maxWidth="lg" sx={{ flex: 1, marginTop: 4 }}>
         <Grid container spacing={4} alignItems="center">
           {/* Аватар */}

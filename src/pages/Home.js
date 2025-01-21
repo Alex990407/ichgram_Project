@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Container, CircularProgress, Typography } from "@mui/material";
-import Sidebar from "../components/Sidebar";
 import PostCard from "../components/PostCard";
 import { useNavigate } from "react-router-dom";
 import PostModal from "../components/PostModal";
@@ -49,19 +48,13 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
-      <Sidebar
-        onOpenCreatePost={onOpenCreatePost}
-        onOpenNotifications={onOpenNotifications}
-        onOpenSearch={onOpenSearch}
-      />
-
         <Container
           maxWidth={false}
           sx={{
             flex: 1,
             mt: 4,
             display: "grid",
-            justifyContent: "center", // Центрируем карточки по горизонтали
+            justifyContent: "center",
             gridTemplateColumns: {
               xs: "1fr", // Одна колонка на маленьких экранах
               sm: "repeat(auto-fill, minmax(400px, 1fr))", // Ширина карточки минимум 400px

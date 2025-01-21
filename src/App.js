@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  Box,
+  Backdrop,
+} from "@mui/material";
+import Sidebar from "./components/Sidebar";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -14,7 +19,6 @@ import Home from "./pages/Home";
 import Messages from "./pages/Messages";
 import NotificationsPanel from "./components/NotificationsPanel";
 import SearchPanel from "./components/SearchPanel";
-import { Backdrop } from "@mui/material";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import PublicRoute from "./utils/PublicRoute";
 import { AvatarProvider } from "./context/AvatarContext";
@@ -24,7 +28,7 @@ const App = () => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const sidebarWidth = { xs: 60, sm: 80, md: 200, lg: 245 };
+  const sidebarWidth = 245;
 
   const onOpenCreatePost = () => setIsCreatePostOpen(true);
   const onCloseCreatePost = () => setIsCreatePostOpen(false);
@@ -38,14 +42,17 @@ const App = () => {
   return (
     <AvatarProvider>
       <Router>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            minHeight: "100vh",
-          }}
-        >
-          <div style={{ flex: 1, display: "flex" }}>
+        <Box display="flex" minHeight="100vh">
+          {/* Sidebar */}
+          <Sidebar
+            onOpenCreatePost={onOpenCreatePost}
+            onOpenNotifications={onOpenNotifications}
+            onOpenSearch={onOpenSearch}
+            width={sidebarWidth}
+          />
+
+          {/* Main Content */}
+          <Box flex={1} ml={`${sidebarWidth}px`}>
             <Routes>
               <Route
                 path="/signup"
@@ -134,35 +141,29 @@ const App = () => {
               />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </div>
+          </Box>
+        </Box>
 
-          <Backdrop
-            open={isNotificationsOpen}
-            sx={{
-              zIndex: (theme) => theme.zIndex.drawer - 1,
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-            }}
-          />
-
-          <NotificationsPanel
-            open={isNotificationsOpen}
-            onClose={onCloseNotifications}
-            sidebarWidth={sidebarWidth.lg}
-          />
-
-          <SearchPanel
-            open={isSearchOpen}
-            onClose={onCloseSearch}
-            sidebarWidth={sidebarWidth.lg}
-          />
-
-          <CreatePostModal
-            open={isCreatePostOpen}
-            onClose={onCloseCreatePost}
-          />
-
-          <Footer />
-        </div>
+        {/* Modals and Panels */}
+        <Backdrop
+          open={isNotificationsOpen}
+          sx={{
+            zIndex: (theme) => theme.zIndex.drawer - 1,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
+        />
+        <NotificationsPanel
+          open={isNotificationsOpen}
+          onClose={onCloseNotifications}
+          sidebarWidth={sidebarWidth}
+        />
+        <SearchPanel
+          open={isSearchOpen}
+          onClose={onCloseSearch}
+          sidebarWidth={sidebarWidth}
+        />
+        <CreatePostModal open={isCreatePostOpen} onClose={onCloseCreatePost} />
+        <Footer />
       </Router>
     </AvatarProvider>
   );

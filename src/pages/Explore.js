@@ -4,7 +4,6 @@ import simpsonImage from "../assets/simpson.jpg";
 import { ReactComponent as Post1 } from "../assets/Post1.svg";
 import { ReactComponent as Post2 } from "../assets/Post2.svg";
 import { ReactComponent as Post3 } from "../assets/Post3.svg";
-import Sidebar from "../components/Sidebar";
 
 const Explore = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   const [posts, setPosts] = useState([]);
@@ -44,11 +43,6 @@ const Explore = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
-      <Sidebar
-        onOpenCreatePost={onOpenCreatePost}
-        onOpenNotifications={onOpenNotifications}
-        onOpenSearch={onOpenSearch}
-      />
       <Container maxWidth="lg" sx={{ flex: 1, mt: 4 }}>
         <Typography variant="h4" sx={{ mb: 3 }}>
           Explore

@@ -14,8 +14,6 @@ import {
   Paper,
 } from "@mui/material";
 
-import Sidebar from "../components/Sidebar";
-
 const Messages = ({ onOpenCreatePost, onOpenSearch, onOpenNotifications }) => {
   const users = [
     {
@@ -100,11 +98,6 @@ const Messages = ({ onOpenCreatePost, onOpenSearch, onOpenNotifications }) => {
 
   return (
     <Container maxWidth="lg" sx={{ display: "flex", height: "100vh", mt: 2 }}>
-      <Sidebar
-        onOpenCreatePost={onOpenCreatePost}
-        onOpenSearch={onOpenSearch}
-        onOpenNotifications={onOpenNotifications}
-      />
       <Paper elevation={1} sx={{ width: "25%", borderRight: "1px solid #ddd" }}>
         <Typography variant="h6" sx={{ p: 2, fontWeight: "bold" }}>
           itcareerhub
