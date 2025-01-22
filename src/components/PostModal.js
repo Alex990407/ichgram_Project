@@ -10,6 +10,8 @@ import { ReactComponent as ClosePageIcon } from "../assets/Close-page.svg";
 import { getFullAvatarUrl } from "../utils/urlHelpers";
 
 const PostModal = ({ open, onClose, post }) => {
+  console.log(post);
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       {/* Header */}

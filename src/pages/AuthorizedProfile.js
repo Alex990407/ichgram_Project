@@ -10,20 +10,31 @@ import PostModal from "../components/PostModal";
 
 const AuthorizedProfile = () => {
   const { userId: routeUserId } = useParams(); // Получаем userId из параметров URL
-  const { profile, loading: profileLoading, error: profileError, fetchProfile } = useUserProfile();
-  const { fetchUserPosts, loading: postsLoading, error: postsError } = usePosts();
+  const {
+    profile,
+    loading: profileLoading,
+    error: profileError,
+    fetchProfileById,
+  } = useUserProfile();
+  const {
+    fetchUserPosts,
+    loading: postsLoading,
+    error: postsError,
+  } = usePosts();
 
   const [userPosts, setUserPosts] = useState([]);
-  const [userId, setUserId] = useState(routeUserId || localStorage.getItem("userId")); // Используем userId из URL или ID текущего пользователя
+  const [userId, setUserId] = useState(
+    routeUserId || localStorage.getItem("userId")
+  ); // Используем userId из URL или ID текущего пользователя
   const [selectedPost, setSelectedPost] = useState(null); // Для выбранного поста
   const [isPostModalOpen, setIsPostModalOpen] = useState(false); // Состояние модального окна
 
   useEffect(() => {
     // Загружаем данные профиля
     if (userId) {
-      fetchProfile(userId);
+      fetchProfileById(userId);
     }
-  }, [userId, fetchProfile]);
+  }, [userId, fetchProfileById]);
 
   useEffect(() => {
     // Загружаем посты пользователя
@@ -69,11 +80,13 @@ const AuthorizedProfile = () => {
 
   const userProfile = profile || defaultProfile;
 
+  console.log(userPosts.posts);
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Container sx={{ flex: 1, marginTop: 4 }}>
         <ProfileDetails profile={userProfile} />
-        <PostsGrid posts={userPosts.posts} onPostClick={handlePostClick} /> {/* Передаём функцию открытия модалки */}
+        <PostsGrid posts={userPosts.posts} onPostClick={handlePostClick} />{" "}
+        {/* Передаём функцию открытия модалки */}
       </Container>
 
       {/* Модальное окно */}

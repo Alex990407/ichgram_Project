@@ -10,7 +10,6 @@ const PostGrid = ({ posts }) => {
       </Typography>
     );
   }
-
   return (
     <Grid container spacing={2}>
       {posts.map((post) => (

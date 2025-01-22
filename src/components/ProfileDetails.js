@@ -6,10 +6,11 @@ import AvatarComponent from "./AvatarComponent";
 const ProfileDetails = ({ profile }) => {
   const navigate = useNavigate();
 
+  console.log();
   return (
     <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>
       <Grid item xs={12} sm={3} textAlign="center">
-        <AvatarComponent size={80} />
+        <AvatarComponent size={80} avatarUrl={profile.avatarUrl} />
       </Grid>
       <Grid item xs={12} sm={9}>
         <Box display="flex" alignItems="center" gap={2} mb={2}>

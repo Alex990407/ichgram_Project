@@ -7,7 +7,9 @@ const AvatarComponent = ({ size = 40, avatarUrl: propAvatarUrl }) => {
   const { avatarUrl: contextAvatarUrl, loading } = useUserContext();
 
   // Используем пропс avatarUrl, если он передан, иначе берем из контекста
-  const avatarUrl = propAvatarUrl ? getFullAvatarUrl(propAvatarUrl) : contextAvatarUrl;
+  const avatarUrl = propAvatarUrl
+    ? getFullAvatarUrl(propAvatarUrl)
+    : contextAvatarUrl;
 
   console.log(avatarUrl);
   if (loading && !propAvatarUrl) {
