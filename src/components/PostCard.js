@@ -8,16 +8,16 @@ const PostCard = ({ post, onClick }) => (
   <div
     style={{
       border: "1px solid #ddd",
-      borderRadius: "16px", // Более закруглённые углы
+      borderRadius: "16px",
       overflow: "hidden",
       cursor: "pointer",
       width: "100%",
-      maxWidth: "600px", // Увеличиваем максимальную ширину
-      boxShadow: "0px 6px 10px rgba(0, 0, 0, 0.15)", // Более выражённая тень
+      maxWidth: "600px",
+      boxShadow: "0px 6px 10px rgba(0, 0, 0, 0.15)",
       transition: "transform 0.2s ease-in-out",
       backgroundColor: "#fff",
     }}
-    onClick={() => onClick(post._id)} // Передаем ID поста при клике
+    onClick={() => onClick(post._id)}
   >
     <PostHeader userAvatar={post.userAvatar} username={post.username} />
     <PostImage imageUrl={post.imageUrl} />

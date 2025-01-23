@@ -20,6 +20,7 @@ const useLogin = () => {
 
       const { token } = response.data; // Предполагаем, что сервер возвращает `token`
 
+      console.log({ token });
       // Сохраняем токен в localStorage
 
       if (token) {

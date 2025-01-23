@@ -8,9 +8,14 @@ import {
 } from "@mui/material";
 import { ReactComponent as ClosePageIcon } from "../assets/Close-page.svg";
 import { getFullAvatarUrl } from "../utils/urlHelpers";
+import useComments from "../hooks/useComments";
+import CommentForm from "./CommentForm";
+import CommentList from "./CommentList";
 
 const PostModal = ({ open, onClose, post }) => {
-  console.log(post);
+  const { comments, loading, addComment, deleteComment } = useComments(
+    post?._id
+  );
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -50,7 +55,7 @@ const PostModal = ({ open, onClose, post }) => {
       </Box>
 
       {/* Content */}
-      <Box display="flex" flexDirection="row" sx={{ height: "400px" }}>
+      <Box display="flex" flexDirection="row" sx={{ height: "500px" }}>
         {!post ? (
           <CircularProgress style={{ margin: "auto" }} />
         ) : (
@@ -85,23 +90,28 @@ const PostModal = ({ open, onClose, post }) => {
               <Typography variant="body2" sx={{ color: "#555", mb: 2 }}>
                 {post.title}
               </Typography>
-              <Typography variant="subtitle2">
-                {post.likes} Likes | {post.comments?.length || 0} Comments
+              <Typography variant="subtitle2" sx={{ mb: 2 }}>
+                {post.likes} Likes | {comments?.length || 0} Comments
               </Typography>
 
-              {/* Comments */}
-              <Box mt={2}>
-                {post.comments?.map((comment, index) => (
-                  <Box key={index} sx={{ mb: 1 }}>
-                    <Typography variant="body2" fontWeight="bold">
-                      {comment.username}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: "#555" }}>
-                      {comment.text}
-                    </Typography>
-                  </Box>
-                ))}
+              {/* Comments Section */}
+              <Box
+                sx={{
+                  flex: 1,
+                  overflowY: "auto", // Добавляем скролл, если комментарии превышают доступное место
+                  borderBottom: "1px solid #ddd",
+                  paddingBottom: "8px",
+                }}
+              >
+                {loading ? (
+                  <CircularProgress style={{ margin: "auto" }} />
+                ) : (
+                  <CommentList comments={comments} onDelete={deleteComment} />
+                )}
               </Box>
+
+              {/* Comment Form */}
+              <CommentForm onSubmit={addComment} />
             </Box>
           </>
         )}
