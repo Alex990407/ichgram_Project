@@ -48,6 +48,7 @@ const AuthorizedProfile = () => {
   }, [userId, fetchUserPosts]);
 
   const handlePostClick = (post) => {
+    post.id = post._id;
     setSelectedPost(post); // Устанавливаем выбранный пост
     setIsPostModalOpen(true); // Открываем модальное окно
   };
@@ -89,6 +90,7 @@ const AuthorizedProfile = () => {
         {/* Передаём функцию открытия модалки */}
       </Container>
 
+{console.log(selectedPost)}
       {/* Модальное окно */}
       {selectedPost && (
         <PostModal

@@ -60,7 +60,9 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
         />
       ))}
 
+{console.log(selectedPost)}
       {selectedPost && (
+        
         <PostModal
           open={isPostModalOpen}
           onClose={handleClosePostModal}
