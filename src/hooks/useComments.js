@@ -6,6 +6,8 @@ const useComments = (postId) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const authToken = localStorage.getItem("authToken"); // Получаем токен из localStorage
+
   useEffect(() => {
     if (postId) {
       fetchComments();
@@ -15,7 +17,11 @@ const useComments = (postId) => {
   const fetchComments = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`/api/comments/${postId}`);
+      const response = await axios.get(`http://localhost:3003/api/comments/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`, // Передаем токен в заголовках
+        },
+      });
       setComments(response.data);
     } catch (err) {
       setError(err.message);
@@ -26,10 +32,15 @@ const useComments = (postId) => {
 
   const addComment = async (commentText) => {
     try {
-      const response = await axios.post("/api/comments", {
-        postId,
-        commentText,
-      });
+      const response = await axios.post(
+        "http://localhost:3003/api/comments",
+        { postId, commentText },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`, // Передаем токен в заголовках
+          },
+        }
+      );
       setComments([response.data, ...comments]);
     } catch (err) {
       setError(err.message);
@@ -38,7 +49,11 @@ const useComments = (postId) => {
 
   const deleteComment = async (commentId) => {
     try {
-      await axios.delete(`/api/comments/${commentId}`);
+      await axios.delete(`http://localhost:3003/api/comments/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`, // Передаем токен в заголовках
+        },
+      });
       setComments(comments.filter((comment) => comment._id !== commentId));
     } catch (err) {
       setError(err.message);
