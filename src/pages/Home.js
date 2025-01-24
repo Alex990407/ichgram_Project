@@ -63,6 +63,7 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
           onClick={() => handlePostClick(post)}
         />
       ))}
+      {console.log(selectedPost)}
 
       {selectedPost && (
         <PostModal

@@ -14,7 +14,7 @@ import CommentList from "./CommentList";
 
 const PostModal = ({ open, onClose, post }) => {
   const { comments, loading, addComment, deleteComment } = useComments(
-    post?._id
+    post?.id
   );
 
   return (

@@ -46,6 +46,7 @@ const AuthorizedProfile = () => {
   }, [userId, fetchUserPosts]);
 
   const handlePostClick = (post) => {
+    post.id = post._id;
     setSelectedPost(post);
     setIsPostModalOpen(true);
   };
@@ -86,7 +87,7 @@ const AuthorizedProfile = () => {
         <PostsGrid posts={userPosts.posts} onPostClick={handlePostClick} />{" "}
         {/* Передаём функцию открытия модалки */}
       </Container>
-
+      {console.log(selectedPost)}
       {/* Модальное окно */}
       {selectedPost && (
         <PostModal
