@@ -9,7 +9,7 @@ import PostsGrid from "../components/PostsGrid";
 import PostModal from "../components/PostModal";
 
 const AuthorizedProfile = () => {
-  const { userId: routeUserId } = useParams(); // Получаем userId из параметров URL
+  const { userId: routeUserId } = useParams();
   const {
     profile,
     loading: profileLoading,
@@ -25,19 +25,17 @@ const AuthorizedProfile = () => {
   const [userPosts, setUserPosts] = useState([]);
   const [userId, setUserId] = useState(
     routeUserId || localStorage.getItem("userId")
-  ); // Используем userId из URL или ID текущего пользователя
-  const [selectedPost, setSelectedPost] = useState(null); // Для выбранного поста
-  const [isPostModalOpen, setIsPostModalOpen] = useState(false); // Состояние модального окна
+  );
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
 
   useEffect(() => {
-    // Загружаем данные профиля
     if (userId) {
       fetchProfileById(userId);
     }
   }, [userId, fetchProfileById]);
 
   useEffect(() => {
-    // Загружаем посты пользователя
     const loadUserPosts = async () => {
       if (userId) {
         const posts = await fetchUserPosts(userId);
@@ -48,13 +46,13 @@ const AuthorizedProfile = () => {
   }, [userId, fetchUserPosts]);
 
   const handlePostClick = (post) => {
-    setSelectedPost(post); // Устанавливаем выбранный пост
-    setIsPostModalOpen(true); // Открываем модальное окно
+    setSelectedPost(post);
+    setIsPostModalOpen(true);
   };
 
   const handleClosePostModal = () => {
-    setSelectedPost(null); // Сбрасываем выбранный пост
-    setIsPostModalOpen(false); // Закрываем модальное окно
+    setSelectedPost(null);
+    setIsPostModalOpen(false);
   };
 
   if (profileLoading || postsLoading) {
@@ -94,7 +92,7 @@ const AuthorizedProfile = () => {
         <PostModal
           open={isPostModalOpen}
           onClose={handleClosePostModal}
-          post={selectedPost} // Передаём данные выбранного поста
+          post={selectedPost}
         />
       )}
     </div>

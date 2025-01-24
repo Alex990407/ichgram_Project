@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { ReactComponent as IchgramIcon } from "../assets/ICHGRAM.svg";
-import { ReactComponent as PhoneImg } from "../assets/PhoneImg.svg";
-import "../styles/Signup.css";
+import styles from "../styles/Signup.css";
 import { validateEmail, validatePassword } from "../utils/validation";
 import useRegister from "../hooks/useRegister";
 
@@ -76,9 +75,6 @@ function Signup() {
 
   return (
     <div className="signup-container">
-      <div className="phone-img-container">
-        <PhoneImg className="phone-img" />
-      </div>
       <div className="signup-form-container">
         <div className="icon-container">
           <IchgramIcon className="IchgramIcon" />

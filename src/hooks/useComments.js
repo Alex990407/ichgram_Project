@@ -17,11 +17,14 @@ const useComments = (postId) => {
   const fetchComments = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:3003/api/comments/${postId}`, {
-        headers: {
-          Authorization: `Bearer ${authToken}`, // Передаем токен в заголовках
-        },
-      });
+      const response = await axios.get(
+        `http://localhost:3003/api/comments/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`, // Передаем токен в заголовках
+          },
+        }
+      );
       setComments(response.data);
     } catch (err) {
       setError(err.message);

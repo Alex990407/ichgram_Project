@@ -50,6 +50,10 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
         padding: "16px",
         gap: "24px",
         backgroundColor: "#f8f9fa",
+        backgroundColor: "#f8f9fa",
+        maxWidth: "800px",
+        width: "100%",
+        margin: "0 auto",
       }}
     >
       {posts.map((post) => (
