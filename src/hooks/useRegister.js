@@ -5,12 +5,11 @@ const useRegister = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  const register = async (formData) => {
+  const register = async (formData, callback) => {
     setLoading(true);
     setError(null);
     setSuccess(false);
 
-    console.log(formData);
     try {
       const response = await fetch("http://localhost:3003/api/auth/register", {
         method: "POST",
@@ -34,6 +33,9 @@ const useRegister = () => {
 
       setSuccess(true);
       console.log("User registered successfully!");
+
+      // Вызовите callback после успешной регистрации
+      if (callback) callback();
     } catch (err) {
       setError(err.message);
       console.error("Registration error:", err.message);

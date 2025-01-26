@@ -5,7 +5,7 @@ import PostModal from "../components/PostModal";
 import usePosts from "../hooks/usePosts";
 
 const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
-  const { fetchAllPosts, loading, error } = usePosts();
+  const { fetchAllPosts, likePost, loading, error } = usePosts();
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
@@ -22,6 +22,7 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   }, []);
 
   const handlePostClick = (post) => {
+    console.log("testt");
     setSelectedPost(post);
     setIsPostModalOpen(true);
   };
@@ -29,6 +30,21 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   const handleClosePostModal = () => {
     setIsPostModalOpen(false);
     setSelectedPost(null);
+  };
+
+  const handleLikePost = async (postId) => {
+    try {
+      const updatedPost = await likePost(postId);
+      if (updatedPost) {
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post._id === updatedPost._id ? updatedPost : post
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Failed to like post:", error);
+    }
   };
 
   if (loading)
@@ -50,17 +66,19 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
         padding: "16px",
         gap: "24px",
         backgroundColor: "#f8f9fa",
+        maxWidth: "800px",
+        width: "100%",
+        margin: "0 auto",
       }}
     >
       {posts.map((post) => (
         <PostCard
-          key={post.id}
+          key={post._id}
           post={post}
           onClick={() => handlePostClick(post)}
+          onLike={handleLikePost} // Передаём обработчик лайков
         />
       ))}
-
-{console.log(selectedPost)}
       {selectedPost && (
         
         <PostModal

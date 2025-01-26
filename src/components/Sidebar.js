@@ -32,7 +32,8 @@ const Sidebar = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
 
   const { profile } = useUserContext(); // Получаем данные профиля из контекста
 
-  console.log('SIDEBAR->>>', profile);
+  console.log(profile?.userId._id);
+
   const handleLogout = () => {
     // Удаляем токен из localStorage
     localStorage.removeItem("authToken");

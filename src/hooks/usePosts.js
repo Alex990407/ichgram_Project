@@ -5,6 +5,34 @@ const usePosts = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Функция для лайка
+  const likePost = useCallback(async (postId) => {
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `http://localhost:3003/api/posts/${postId}/like`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      setLoading(false);
+
+      return {
+        ...response.data.post,
+        likes: Array.isArray(response.data.post.likes)
+          ? response.data.post.likes
+          : [],
+      };
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to like post");
+      setLoading(false);
+      return null;
+    }
+  }, []);
+
   const createPost = useCallback(async (formData) => {
     try {
       setLoading(true);
@@ -86,6 +114,7 @@ const usePosts = () => {
   }, []);
 
   return {
+    likePost,
     createPost,
     fetchAllPosts,
     fetchPostById,

@@ -29,8 +29,16 @@ const CommentList = ({ comments, onDelete }) => {
               onClick={() => onDelete(comment._id)}
               size="small"
               color="error"
+              sx={{
+                padding: 0,
+                width: "24px",
+                height: "24px",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 0, 0, 0.1)",
+                },
+              }}
             >
-              <DeleteIcon />
+              <DeleteIcon fontSize="small" />
             </IconButton>
           )}
         </Box>

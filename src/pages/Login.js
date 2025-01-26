@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Импорт useNavigate
+import { useNavigate } from "react-router-dom";
 import { ReactComponent as IchgramIcon } from "../assets/ICHGRAM.svg";
 import { validateEmail, validatePassword } from "../utils/validation";
 import styles from "../styles/Login.module.css";
@@ -66,11 +66,13 @@ const Login = () => {
               <span className={styles.errorMessage}>{errors.password}</span>
             )}
           </div>
-          <button type="submit" className={styles.button} disabled={loading}>
-            {loading ? "Loading..." : "Log in"}
-          </button>
-          {error && <p className={styles.errorMessage}>{error}</p>}
+          <div className={styles.inputContainer}>
+            <button type="submit" className={styles.button} disabled={loading}>
+              {loading ? "Loading..." : "Log in"}
+            </button>
+          </div>
         </form>
+
         <div className={styles.orDivider}>
           <span>OR</span>
         </div>

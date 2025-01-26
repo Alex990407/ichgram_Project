@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ReactComponent as IchgramIcon } from "../assets/ICHGRAM.svg";
-import { ReactComponent as PhoneImg } from "../assets/PhoneImg.svg";
-import "../styles/Signup.css";
+import styles from "../styles/Signup.css";
 import { validateEmail, validatePassword } from "../utils/validation";
 import useRegister from "../hooks/useRegister";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -21,8 +21,14 @@ function Signup() {
   });
 
   const { register, loading, error, success, clearError } = useRegister();
+  const navigate = useNavigate();
 
-  console.log("Error from useRegister:", error); // Лог для отладки
+  // Перенаправление на страницу логина при успешной регистрации
+  useEffect(() => {
+    if (success) {
+      navigate("/login"); // Переносим пользователя на страницу логина
+    }
+  }, [success, navigate]);
 
   // Обработчик изменения данных в форме
   const handleChange = (e) => {
@@ -61,9 +67,11 @@ function Signup() {
     }
 
     // Попытка регистрации
-    await register(formData);
+    await register(formData, () => {
+      navigate("/login"); // Переносим пользователя на страницу логина
+    });
 
-    // Если ошибка, очищаем форму
+    // Если ошибка, очищаем форму (на случай ошибок регистрации)
     if (error) {
       setFormData({
         email: "",
@@ -76,9 +84,6 @@ function Signup() {
 
   return (
     <div className="signup-container">
-      <div className="phone-img-container">
-        <PhoneImg className="phone-img" />
-      </div>
       <div className="signup-form-container">
         <div className="icon-container">
           <IchgramIcon className="IchgramIcon" />
@@ -91,15 +96,15 @@ function Signup() {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              backgroundColor: "black", // Черный фон
-              color: "red", // Красный цвет текста
+              backgroundColor: "black",
+              color: "red",
               padding: "20px",
               borderRadius: "8px",
               fontSize: "18px",
               fontWeight: "bold",
               textAlign: "center",
-              zIndex: 1000, // Поверх всех элементов
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Легкая тень для выделения
+              zIndex: 1000,
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
             }}
           >
             {error}
@@ -171,11 +176,6 @@ function Signup() {
             {loading ? "Registering..." : "Sign up"}
           </button>
         </form>
-        {success && (
-          <div className="success-message">
-            <span>Registration successful! You can now log in.</span>
-          </div>
-        )}
         <div className="login-link">
           Have an account? <a href="/login">Log in</a>
         </div>

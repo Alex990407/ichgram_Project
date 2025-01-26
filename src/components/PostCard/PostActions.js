@@ -1,13 +1,33 @@
 import React, { useState } from "react";
-import { ReactComponent as CommentsIcon } from "../../assets/Coments.svg";
 import { ReactComponent as LikeIcon } from "../../assets/Like-icon.svg";
+import { ReactComponent as CommentsIcon } from "../../assets/Coments.svg";
 
-const PostActions = ({ initialLikes, commentsCount }) => {
-  const [likes, setLikes] = useState(initialLikes || 0);
+const PostActions = ({ initialLikes = [], commentsCount = 0, onLike }) => {
+  const userId = localStorage.getItem("userId");
 
-  const handleLike = (e) => {
+  console.log(initialLikes);
+
+  // Проверка, что `initialLikes` — массив
+  const likesArray = Array.isArray(initialLikes) ? initialLikes : [];
+  // const [likes, setLikes] = useState(likesArray.length);
+  const [likes, setLikes] = useState(initialLikes);
+  const [isLiked, setIsLiked] = useState(likesArray.includes(userId));
+  const [loading, setLoading] = useState(false);
+
+  const handleLike = async (e) => {
     e.stopPropagation();
-    setLikes((prevLikes) => prevLikes + 1);
+    setLoading(true);
+    try {
+      const updatedPost = await onLike();
+      if (updatedPost) {
+        setLikes(updatedPost.likes.length);
+        setIsLiked(updatedPost.likes.includes(userId));
+      }
+    } catch (error) {
+      console.error("Error liking post:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCommentClick = (e) => {
@@ -23,6 +43,7 @@ const PostActions = ({ initialLikes, commentsCount }) => {
         gap: "16px",
       }}
     >
+      {/* Like Button */}
       <div
         style={{
           display: "flex",
@@ -31,10 +52,16 @@ const PostActions = ({ initialLikes, commentsCount }) => {
         }}
         onClick={handleLike}
       >
-        <LikeIcon style={{ marginRight: "5px" }} />
+        <LikeIcon
+          style={{
+            marginRight: "5px",
+            fill: isLiked ? "red" : "gray",
+          }}
+        />
         <span style={{ fontSize: "14px", color: "#555" }}>{likes}</span>
       </div>
 
+      {/* Comments */}
       <div
         style={{
           display: "flex",
