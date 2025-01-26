@@ -7,6 +7,7 @@ const CommentForm = ({ onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (commentText.trim()) {
+      console.log("Submitting comment:", commentText);
       onSubmit(commentText);
       setCommentText("");
     }

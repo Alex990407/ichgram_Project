@@ -14,6 +14,7 @@ export const UserProvider = ({ children }) => {
 
   // Получение данных профиля авторизованного пользователя
   const fetchProfile = async () => {
+    console.log("fetchProfileById");
     setLoading(true);
     setError(null);
 
@@ -23,9 +24,9 @@ export const UserProvider = ({ children }) => {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
       });
-      setProfile(response.data);
-      
+
       setAvatarUrl(getFullAvatarUrl(response.data.avatarUrl));
+      setProfile(response.data);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch profile");
     } finally {
@@ -35,6 +36,7 @@ export const UserProvider = ({ children }) => {
 
   // Получение данных профиля по ID пользователя
   const fetchProfileById = async (userId) => {
+    console.log("fetchProfileById");
     setLoading(true);
     setError(null);
     try {
