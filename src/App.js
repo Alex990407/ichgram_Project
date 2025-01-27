@@ -12,7 +12,6 @@ import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import NotFound from "./pages/NotFound";
 import Explore from "./pages/Explore";
-import Profile from "./pages/Profile";
 import Footer from "./components/Footer";
 import AuthorizedProfile from "./pages/AuthorizedProfile";
 import EditProfile from "./pages/EditProfile";
@@ -54,7 +53,6 @@ const AppLayout = () => {
   return (
     <Box display="flex" flexDirection="column" minHeight="100vh">
       <Box display="flex" flex={1}>
-        {/* Sidebar отображается только на разрешенных маршрутах */}
         {!shouldHideSidebar && (
           <Sidebar
             onOpenCreatePost={onOpenCreatePost}
@@ -64,7 +62,6 @@ const AppLayout = () => {
           />
         )}
 
-        {/* Основной контент */}
         <Box
           flex={1}
           sx={{
@@ -76,7 +73,6 @@ const AppLayout = () => {
           }}
         >
           <Routes>
-            {/* Публичные маршруты */}
             <Route
               path="/signup"
               element={
@@ -95,7 +91,6 @@ const AppLayout = () => {
             />
             <Route path="/forgot-password" element={<ForgotPassword />} />
 
-            {/* Защищенные маршруты */}
             <Route
               path="/"
               element={
@@ -133,18 +128,6 @@ const AppLayout = () => {
               }
             />
             <Route
-              path="/profile/:userId"
-              element={
-                <ProtectedRoute>
-                  <Profile
-                    onOpenCreatePost={onOpenCreatePost}
-                    onOpenNotifications={onOpenNotifications}
-                    onOpenSearch={onOpenSearch}
-                  />
-                </ProtectedRoute>
-              }
-            />
-            <Route
               path="/myProfile/:userId"
               element={
                 <ProtectedRoute>
@@ -169,10 +152,8 @@ const AppLayout = () => {
         </Box>
       </Box>
 
-      {/* Футер */}
       <Footer sx={{ mt: "auto" }} />
 
-      {/* Модалки и панели */}
       <Backdrop
         open={isNotificationsOpen}
         sx={{

@@ -28,8 +28,7 @@ const Login = () => {
     const response = await login(email, password);
 
     if (response) {
-      console.log("Successfully logged in:", response);
-      navigate("/"); // Перенаправление на домашнюю страницу
+      navigate("/");
     }
   };
 

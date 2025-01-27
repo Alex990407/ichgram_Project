@@ -28,7 +28,6 @@ const useUserProfile = () => {
 
   // Получить данные профиля по userId
   const fetchProfileById = useCallback(async (userId) => {
-    console.log("fetchProfileById", userId);
     setLoading(true);
     setError(null);
     try {

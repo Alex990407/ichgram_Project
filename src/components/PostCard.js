@@ -3,22 +3,30 @@ import PostHeader from "./PostCard/PostHeader";
 import PostImage from "./PostCard/PostImage";
 import PostActions from "./PostCard/PostActions";
 import PostDescription from "./PostCard/PostDescription";
+import { useUserContext } from "../context/UserContext";
+import usePosts from "../hooks/usePosts";
 
-const PostCard = ({ post, onClick, onLike }) => {
+const PostCard = ({ post, onClick }) => {
+  const { profile } = useUserContext();
+  const { likePost } = usePosts();
+
   const [isLiked, setIsLiked] = useState(
-    Array.isArray(post.likes) &&
-      post.likes.includes(localStorage.getItem("userId"))
+    Array.isArray(post.likes) && post.likes.includes(profile?.userId._id)
   );
   const [likesCount, setLikesCount] = useState(
     Array.isArray(post.likes) ? post.likes.length : 0
   );
 
   const handleLike = async () => {
-    console.log(post);
-    const updatedPost = await onLike(post.id);
-    if (updatedPost) {
-      setIsLiked(updatedPost.likes.includes(localStorage.getItem("userId")));
-      setLikesCount(updatedPost.likes.length);
+    try {
+      console.log(post);
+      const updatedPost = await likePost(post._id);
+      if (updatedPost) {
+        setIsLiked(updatedPost.likes.includes(profile?.userId._id));
+        setLikesCount(updatedPost.likes.length);
+      }
+    } catch (error) {
+      console.error("Error liking post:", error);
     }
   };
 
@@ -40,9 +48,10 @@ const PostCard = ({ post, onClick, onLike }) => {
       <PostHeader userAvatar={post.userAvatar} username={post.username} />
       <PostImage imageUrl={post.imageUrl} />
       <PostActions
-        initialLikes={post.likes} // Гарантируем массив
+        initialLikes={post.likes}
         commentsCount={post.comments?.length || 0}
-        onLike={handleLike} // Передаем обработчик лайков
+        onLike={handleLike}
+        isLikedProp={isLiked}
       />
       <PostDescription username={post.username} title={post.title} />
     </div>

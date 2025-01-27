@@ -32,7 +32,6 @@ const useRegister = () => {
       }
 
       setSuccess(true);
-      console.log("User registered successfully!");
 
       // Вызовите callback после успешной регистрации
       if (callback) callback();

@@ -12,7 +12,6 @@ export const AvatarProvider = ({ children }) => {
   // Функция для загрузки аватара с сервера
   const fetchAvatar = async () => {
     const token = localStorage.getItem("authToken");
-    console.log("Using token123:", token);
     try {
       setLoading(true);
       const response = await axios.get(

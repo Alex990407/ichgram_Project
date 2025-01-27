@@ -14,7 +14,6 @@ export const UserProvider = ({ children }) => {
 
   // Получение данных профиля авторизованного пользователя
   const fetchProfile = async () => {
-    console.log("fetchProfileById");
     setLoading(true);
     setError(null);
 
@@ -36,7 +35,6 @@ export const UserProvider = ({ children }) => {
 
   // Получение данных профиля по ID пользователя
   const fetchProfileById = async (userId) => {
-    console.log("fetchProfileById");
     setLoading(true);
     setError(null);
     try {

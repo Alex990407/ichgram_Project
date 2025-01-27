@@ -11,7 +11,6 @@ const AvatarComponent = ({ size = 40, avatarUrl: propAvatarUrl }) => {
     ? getFullAvatarUrl(propAvatarUrl)
     : contextAvatarUrl;
 
-  console.log(avatarUrl);
   if (loading && !propAvatarUrl) {
     return <CircularProgress size={size} />;
   }

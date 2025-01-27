@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -13,29 +13,17 @@ import {
   useMediaQuery,
   useTheme,
   Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import { ReactComponent as ClosePageIcon } from "../assets/Close-page.svg";
-
-const users = [
-  {
-    id: 1,
-    name: "sashaa",
-    avatar: "https://via.placeholder.com/40",
-  },
-  {
-    id: 2,
-    name: "john_doe",
-    avatar: "https://via.placeholder.com/40",
-  },
-  {
-    id: 3,
-    name: "jane_smith",
-    avatar: "https://via.placeholder.com/40",
-  },
-];
+import useSearchUsers from "../hooks/useSearchUsers";
+import { useNavigate } from "react-router-dom";
 
 const SearchPanel = ({ open, onClose, sidebarWidth }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const { filteredUsers, loading, error, filterUsers } = useSearchUsers(open);
+  const navigate = useNavigate();
+
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -43,10 +31,30 @@ const SearchPanel = ({ open, onClose, sidebarWidth }) => {
   const panelWidth = isSmallScreen ? "100%" : isMediumScreen ? "40%" : "25%";
   const panelLeft = isSmallScreen ? 0 : sidebarWidth;
 
-  // Фильтрация пользователей
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    filterUsers(searchQuery);
+  }, [searchQuery, filterUsers]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    if (open) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open, onClose]);
+
+  const handleUserClick = (userId) => {
+    navigate(`/myProfile/${userId}`);
+    onClose();
+  };
 
   return (
     <>
@@ -56,12 +64,11 @@ const SearchPanel = ({ open, onClose, sidebarWidth }) => {
         sx={{
           zIndex: 1299,
           backgroundColor: "rgba(0, 0, 0, 0.5)",
-          left: panelLeft, // Начало затемнения после Sidebar или от края
-          width: `calc(100% - ${panelLeft}px)`, // Затемняем только правую часть экрана
+          left: panelLeft,
+          width: `calc(100% - ${panelLeft}px)`,
         }}
       />
 
-      {/* Панель поиска */}
       <Box
         sx={{
           position: "fixed",
@@ -78,13 +85,11 @@ const SearchPanel = ({ open, onClose, sidebarWidth }) => {
           display: open ? "block" : "none",
         }}
       >
-        {/* Заголовок с кнопкой закрытия */}
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-
             padding: isSmallScreen ? "12px" : "16px",
             backgroundColor: "#fff",
           }}
@@ -92,9 +97,7 @@ const SearchPanel = ({ open, onClose, sidebarWidth }) => {
           <Typography
             variant={isSmallScreen ? "h6" : "h5"}
             fontWeight="bold"
-            sx={{
-              textAlign: "start", // Заголовок остаётся слева
-            }}
+            sx={{ textAlign: "start" }}
           >
             Search
           </Typography>
@@ -110,7 +113,6 @@ const SearchPanel = ({ open, onClose, sidebarWidth }) => {
           </IconButton>
         </Box>
 
-        {/* Поле поиска */}
         <Box sx={{ padding: "16px" }}>
           <TextField
             fullWidth
@@ -127,7 +129,6 @@ const SearchPanel = ({ open, onClose, sidebarWidth }) => {
           />
         </Box>
 
-        {/* Список пользователей */}
         <Box sx={{ padding: isSmallScreen ? "8px" : "16px" }}>
           <Typography
             variant="subtitle1"
@@ -136,37 +137,61 @@ const SearchPanel = ({ open, onClose, sidebarWidth }) => {
           >
             Recent
           </Typography>
-          <List>
-            {filteredUsers.map((user) => (
-              <React.Fragment key={user.id}>
-                <ListItem alignItems="center">
-                  <ListItemAvatar>
-                    <Avatar
-                      src={user.avatar}
-                      alt={user.name}
-                      sx={{
-                        width: isSmallScreen ? 32 : 40,
-                        height: isSmallScreen ? 32 : 40,
-                      }}
-                    />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={
-                      <Typography
-                        variant="body2"
+
+          {loading ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100px",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : error ? (
+            <Typography color="error" textAlign="center">
+              {error}
+            </Typography>
+          ) : filteredUsers.length === 0 ? (
+            <Typography textAlign="center">No users found</Typography>
+          ) : (
+            <List>
+              {filteredUsers.map((user) => (
+                <React.Fragment key={user.id}>
+                  <ListItem
+                    alignItems="center"
+                    onClick={() => handleUserClick(user.id)} // Обработчик клика
+                    sx={{ cursor: "pointer" }} // Курсор "указатель"
+                  >
+                    <ListItemAvatar>
+                      <Avatar
+                        src={user.avatarUrl}
+                        alt={user.username}
                         sx={{
-                          fontSize: isSmallScreen ? "14px" : "16px",
+                          width: isSmallScreen ? 32 : 40,
+                          height: isSmallScreen ? 32 : 40,
                         }}
-                      >
-                        {user.name}
-                      </Typography>
-                    }
-                  />
-                </ListItem>
-                <Divider />
-              </React.Fragment>
-            ))}
-          </List>
+                      />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            fontSize: isSmallScreen ? "14px" : "16px",
+                          }}
+                        >
+                          {user.username}
+                        </Typography>
+                      }
+                    />
+                  </ListItem>
+                  <Divider />
+                </React.Fragment>
+              ))}
+            </List>
+          )}
         </Box>
       </Box>
     </>

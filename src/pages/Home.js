@@ -22,7 +22,6 @@ const Home = ({ onOpenCreatePost, onOpenNotifications, onOpenSearch }) => {
   }, []);
 
   const handlePostClick = (post) => {
-    console.log("testt");
     setSelectedPost(post);
     setIsPostModalOpen(true);
   };

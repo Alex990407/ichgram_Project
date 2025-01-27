@@ -6,7 +6,7 @@ import AvatarComponent from "./AvatarComponent";
 const ProfileDetails = ({ profile }) => {
   const navigate = useNavigate();
 
-  console.log();
+  console.log(profile);
   return (
     <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>
       <Grid item xs={12} sm={3} textAlign="center">

@@ -7,6 +7,7 @@ const usePosts = () => {
 
   // Функция для лайка
   const likePost = useCallback(async (postId) => {
+    console.log(postId);
     try {
       setLoading(true);
       const response = await axios.post(
@@ -59,7 +60,6 @@ const usePosts = () => {
       setLoading(true);
       const response = await axios.get("http://localhost:3003/api/posts");
       setLoading(false);
-      console.log("fetchPosts-:>>>>>", response.data);
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch posts");
@@ -102,7 +102,6 @@ const usePosts = () => {
           },
         }
       );
-      console.log("API response for posts:", response.data);
       setLoading(false);
       return response.data;
     } catch (err) {

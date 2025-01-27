@@ -40,11 +40,16 @@ const AuthorizedProfile = () => {
       if (userId) {
         const posts = await fetchUserPosts(userId);
         setUserPosts(posts || []);
+        if (profile) {
+          profile.postsCount = posts ? posts.length : 0;
+        }
+        console.log('asdasd',profile);
       }
     };
     loadUserPosts();
   }, [userId, fetchUserPosts]);
 
+  console.log(userPosts.posts);
   const handlePostClick = (post) => {
     post.id = post._id;
     setSelectedPost(post);
@@ -79,7 +84,6 @@ const AuthorizedProfile = () => {
 
   const userProfile = profile || defaultProfile;
 
-  console.log(userPosts.posts);
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Container sx={{ flex: 1, marginTop: 4 }}>
@@ -87,7 +91,6 @@ const AuthorizedProfile = () => {
         <PostsGrid posts={userPosts.posts} onPostClick={handlePostClick} />{" "}
         {/* Передаём функцию открытия модалки */}
       </Container>
-      {console.log(selectedPost)}
       {/* Модальное окно */}
       {selectedPost && (
         <PostModal
