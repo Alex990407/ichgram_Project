@@ -29,15 +29,15 @@ const EditProfile = () => {
         website: profile.website || "",
         about: profile.description || "",
       });
-      setAvatarPreview(profile.avatarUrl || ""); // Устанавливаем текущий аватар
+      setAvatarPreview(profile.avatarUrl || "");
     }
   }, [profile]);
 
   const handleAvatarChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setAvatarFile(file); // Сохраняем файл для отправки позже
-      setAvatarPreview(URL.createObjectURL(file)); // Устанавливаем превью
+      setAvatarFile(file);
+      setAvatarPreview(URL.createObjectURL(file));
     }
   };
 

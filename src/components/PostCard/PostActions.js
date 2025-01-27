@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { ReactComponent as CommentsIcon } from "../../assets/Coments.svg";
 import LikeButton from "../LikeButton";
 
-const PostActions = ({ initialLikes = [], commentsCount = 0, onLike, isLikedProp }) => {
+const PostActions = ({
+  initialLikes = [],
+  commentsCount = 0,
+  onLike,
+  isLikedProp,
+}) => {
   const userId = localStorage.getItem("userId");
 
   const likesArray = Array.isArray(initialLikes) ? initialLikes : [];
@@ -35,7 +40,11 @@ const PostActions = ({ initialLikes = [], commentsCount = 0, onLike, isLikedProp
       }}
     >
       {/* Like Button */}
-      <LikeButton isLiked={isLikedProp} onLike={handleLike} likesCount={likes} />
+      <LikeButton
+        isLiked={isLikedProp}
+        onLike={handleLike}
+        likesCount={likes}
+      />
 
       {/* Comments */}
       <div
