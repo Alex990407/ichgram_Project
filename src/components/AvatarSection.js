@@ -9,7 +9,7 @@ const AvatarSection = () => {
   const handleAvatarChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      await uploadAvatar(file); // Загрузка нового аватара
+      await uploadAvatar(file);
     }
   };
 

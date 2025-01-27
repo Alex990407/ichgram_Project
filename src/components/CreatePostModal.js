@@ -16,27 +16,24 @@ const CreatePostModal = ({ open, onClose }) => {
   const [image, setImage] = useState(null);
   const { createPost, loading, error } = useCreatePost();
 
-  // Обработчик выбора файла
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setImage(e.target.files[0]);
     }
   };
 
-  // Отправка данных на сервер
   const handleSubmit = async () => {
     const success = await createPost(image, caption);
     if (success) {
       alert("Post created successfully!");
       setCaption("");
       setImage(null);
-      onClose(); // Закрываем модалку
+      onClose();
     }
   };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      {/* Заголовок с кнопкой закрытия */}
       <Box
         sx={{
           display: "flex",
@@ -71,7 +68,6 @@ const CreatePostModal = ({ open, onClose }) => {
         </IconButton>
       </Box>
 
-      {/* Основное содержимое */}
       <Box display="flex" flexDirection="row" sx={{ height: "400px" }}>
         <Box
           flex={1}

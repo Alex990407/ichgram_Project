@@ -1,23 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
-  Divider,
-  TextField,
-  IconButton,
-  useMediaQuery,
-  useTheme,
-  Backdrop,
-  CircularProgress,
-} from "@mui/material";
-import { ReactComponent as ClosePageIcon } from "../assets/Close-page.svg";
+import { Box, Backdrop, useMediaQuery, useTheme } from "@mui/material";
 import useSearchUsers from "../hooks/useSearchUsers";
 import { useNavigate } from "react-router-dom";
+import SearchHeader from "./Search/SearchHeader";
+import SearchInput from "./Search/SearchInput";
+import SearchResults from "./Search/SearchResults";
 
 const SearchPanel = ({ open, onClose, sidebarWidth }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -85,114 +72,19 @@ const SearchPanel = ({ open, onClose, sidebarWidth }) => {
           display: open ? "block" : "none",
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: isSmallScreen ? "12px" : "16px",
-            backgroundColor: "#fff",
-          }}
-        >
-          <Typography
-            variant={isSmallScreen ? "h6" : "h5"}
-            fontWeight="bold"
-            sx={{ textAlign: "start" }}
-          >
-            Search
-          </Typography>
-          <IconButton
-            onClick={onClose}
-            sx={{
-              padding: isSmallScreen ? "4px" : "8px",
-              width: "24px",
-              height: "24px",
-            }}
-          >
-            <ClosePageIcon width="24px" height="24px" />
-          </IconButton>
-        </Box>
-
-        <Box sx={{ padding: "16px" }}>
-          <TextField
-            fullWidth
-            placeholder="Search"
-            variant="outlined"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            InputProps={{
-              sx: {
-                borderRadius: "8px",
-                backgroundColor: "#f3f4f6",
-              },
-            }}
-          />
-        </Box>
-
-        <Box sx={{ padding: isSmallScreen ? "8px" : "16px" }}>
-          <Typography
-            variant="subtitle1"
-            fontWeight="bold"
-            sx={{ marginBottom: isSmallScreen ? 1 : 2 }}
-          >
-            Recent
-          </Typography>
-
-          {loading ? (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100px",
-              }}
-            >
-              <CircularProgress />
-            </Box>
-          ) : error ? (
-            <Typography color="error" textAlign="center">
-              {error}
-            </Typography>
-          ) : filteredUsers.length === 0 ? (
-            <Typography textAlign="center">No users found</Typography>
-          ) : (
-            <List>
-              {filteredUsers.map((user) => (
-                <React.Fragment key={user.id}>
-                  <ListItem
-                    alignItems="center"
-                    onClick={() => handleUserClick(user.id)} // Обработчик клика
-                    sx={{ cursor: "pointer" }} // Курсор "указатель"
-                  >
-                    <ListItemAvatar>
-                      <Avatar
-                        src={user.avatarUrl}
-                        alt={user.username}
-                        sx={{
-                          width: isSmallScreen ? 32 : 40,
-                          height: isSmallScreen ? 32 : 40,
-                        }}
-                      />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontSize: isSmallScreen ? "14px" : "16px",
-                          }}
-                        >
-                          {user.username}
-                        </Typography>
-                      }
-                    />
-                  </ListItem>
-                  <Divider />
-                </React.Fragment>
-              ))}
-            </List>
-          )}
-        </Box>
+        <SearchHeader onClose={onClose} isSmallScreen={isSmallScreen} />
+        <SearchInput
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isSmallScreen={isSmallScreen}
+        />
+        <SearchResults
+          filteredUsers={filteredUsers}
+          loading={loading}
+          error={error}
+          onUserClick={handleUserClick}
+          isSmallScreen={isSmallScreen}
+        />
       </Box>
     </>
   );

@@ -98,7 +98,7 @@ const PostModal = ({ open, onClose, post }) => {
               <Box
                 sx={{
                   flex: 1,
-                  overflowY: "auto", // Добавляем скролл, если комментарии превышают доступное место
+                  overflowY: "auto",
                   borderBottom: "1px solid #ddd",
                   paddingBottom: "8px",
                 }}

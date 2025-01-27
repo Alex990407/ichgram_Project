@@ -41,15 +41,14 @@ const AuthorizedProfile = () => {
         const posts = await fetchUserPosts(userId);
         setUserPosts(posts || []);
         if (profile) {
-          profile.postsCount = posts ? posts.length : 0;
+          profile.postsCount = posts ? posts.posts.length : 0;
         }
-        console.log('asdasd',profile);
       }
     };
     loadUserPosts();
   }, [userId, fetchUserPosts]);
 
-  console.log(userPosts.posts);
+
   const handlePostClick = (post) => {
     post.id = post._id;
     setSelectedPost(post);
@@ -83,6 +82,10 @@ const AuthorizedProfile = () => {
   };
 
   const userProfile = profile || defaultProfile;
+  console.log(userPosts);
+  if(userPosts.posts){
+    userProfile.postsCount = userPosts.posts.length;
+  }
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>

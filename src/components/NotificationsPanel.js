@@ -60,8 +60,8 @@ const NotificationsPanel = ({ open, onClose, sidebarWidth }) => {
         sx={{
           zIndex: 1299,
           backgroundColor: "rgba(0, 0, 0, 0.5)",
-          left: panelLeft, // Начало затемнения после Sidebar или от края
-          width: `calc(100% - ${panelLeft}px)`, // Затемняем только правую часть экрана
+          left: panelLeft,
+          width: `calc(100% - ${panelLeft}px)`,
         }}
       />
 
@@ -69,16 +69,16 @@ const NotificationsPanel = ({ open, onClose, sidebarWidth }) => {
         sx={{
           position: "fixed",
           top: 0,
-          left: panelLeft, // Расположение панели
+          left: panelLeft,
           height: "100%",
-          width: panelWidth, // Динамическая ширина
-          maxWidth: isSmallScreen ? "100%" : "400px", // Максимальная ширина для больших экранов
+          width: panelWidth,
+          maxWidth: isSmallScreen ? "100%" : "400px",
           backgroundColor: "#fff",
           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-          transform: open ? "translateX(0)" : "translateX(100%)", // Плавный выезд
+          transform: open ? "translateX(0)" : "translateX(100%)",
           transition: "transform 0.3s ease",
           zIndex: 1300,
-          display: open ? "block" : "none", // Скрываем панель
+          display: open ? "block" : "none",
         }}
       >
         {/* Заголовок */}
@@ -97,7 +97,7 @@ const NotificationsPanel = ({ open, onClose, sidebarWidth }) => {
             variant={isSmallScreen ? "h6" : "h5"}
             fontWeight="bold"
             sx={{
-              textAlign: "start", // Заголовок остаётся слева
+              textAlign: "start",
             }}
           >
             Notifications
@@ -132,7 +132,7 @@ const NotificationsPanel = ({ open, onClose, sidebarWidth }) => {
                       src={notification.avatar}
                       alt={notification.user}
                       sx={{
-                        width: isSmallScreen ? 32 : 40, // Уменьшаем аватар на маленьких экранах
+                        width: isSmallScreen ? 32 : 40,
                         height: isSmallScreen ? 32 : 40,
                       }}
                     />
@@ -142,7 +142,7 @@ const NotificationsPanel = ({ open, onClose, sidebarWidth }) => {
                       <Typography
                         variant="body2"
                         sx={{
-                          fontSize: isSmallScreen ? "14px" : "16px", // Меньший шрифт на маленьких экранах
+                          fontSize: isSmallScreen ? "14px" : "16px",
                         }}
                       >
                         <strong>{notification.user}</strong>{" "}
@@ -152,7 +152,7 @@ const NotificationsPanel = ({ open, onClose, sidebarWidth }) => {
                     secondary={notification.time}
                     secondaryTypographyProps={{
                       style: {
-                        fontSize: isSmallScreen ? "12px" : "14px", // Меньший шрифт времени
+                        fontSize: isSmallScreen ? "12px" : "14px",
                       },
                     }}
                   />

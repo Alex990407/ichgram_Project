@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ReactComponent as CommentsIcon } from "../../assets/Coments.svg";
-import LikeButton from "../LikeButton"; // Импорт нового компонента
+import LikeButton from "../LikeButton";
 
 const PostActions = ({ initialLikes = [], commentsCount = 0, onLike, isLikedProp }) => {
   const userId = localStorage.getItem("userId");

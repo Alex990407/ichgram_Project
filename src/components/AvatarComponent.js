@@ -6,7 +6,6 @@ import { getFullAvatarUrl } from "../utils/urlHelpers";
 const AvatarComponent = ({ size = 40, avatarUrl: propAvatarUrl }) => {
   const { avatarUrl: contextAvatarUrl, loading } = useUserContext();
 
-  // Используем пропс avatarUrl, если он передан, иначе берем из контекста
   const avatarUrl = propAvatarUrl
     ? getFullAvatarUrl(propAvatarUrl)
     : contextAvatarUrl;

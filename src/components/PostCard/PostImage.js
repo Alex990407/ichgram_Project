@@ -4,7 +4,7 @@ const PostImage = ({ imageUrl }) => (
   <div
     style={{
       width: "100%",
-      height: "300px", // Увеличиваем высоту изображения
+      height: "300px",
       backgroundColor: "#f0f0f0",
       display: "flex",
       alignItems: "center",
@@ -17,7 +17,7 @@ const PostImage = ({ imageUrl }) => (
       style={{
         maxWidth: "100%",
         maxHeight: "100%",
-        objectFit: "cover", // Подгоняем изображение
+        objectFit: "cover",
       }}
     />
   </div>
